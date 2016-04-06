@@ -21,29 +21,29 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centosverticecommonremove *CentOsMegamCommonRemove
+var centosverticecommonremove *CentosMegamCommonRemove
 
 func init() {
-	centosverticecommonremove = &CentOsMegamCommonRemove{}
-	templates.Register("CentOsMegamCommonRemove", centosverticecommonremove)
+	centosverticecommonremove = &CentosMegamCommonRemove{}
+	templates.Register("CentosMegamCommonRemove", centosverticecommonremove)
 }
 
-type CentOsMegamCommonRemove struct{}
+type CentosMegamCommonRemove struct{}
 
-func (tpl *CentOsMegamCommonRemove) Render(p urknall.Package) {
-	p.AddTemplate("common", &CentOsMegamCommonRemoveTemplate{})
+func (tpl *CentosMegamCommonRemove) Render(p urknall.Package) {
+	p.AddTemplate("common", &CentosMegamCommonRemoveTemplate{})
 }
 
-func (tpl *CentOsMegamCommonRemove) Options(t *templates.Template) {
+func (tpl *CentosMegamCommonRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsMegamCommonRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsMegamCommonRemove{})
+func (tpl *CentosMegamCommonRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosMegamCommonRemove{})
 }
 
-type CentOsMegamCommonRemoveTemplate struct{}
+type CentosMegamCommonRemoveTemplate struct{}
 
-func (m *CentOsMegamCommonRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosMegamCommonRemoveTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("verticecommon",
 		RemovePackage("verticecommon"),
 		RemovePackages(""),

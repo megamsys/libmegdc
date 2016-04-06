@@ -25,28 +25,28 @@ const (
 	Slash = `\`
 )
 
-var centosoneinstall *CentOsOneInstall
+var centosoneinstall *CentosOneInstall
 
 func init() {
-	centosoneinstall = &CentOsOneInstall{}
-	templates.Register("CentOsOneInstall", centosoneinstall)
+	centosoneinstall = &CentosOneInstall{}
+	templates.Register("CentosOneInstall", centosoneinstall)
 }
 
-type CentOsOneInstall struct{}
+type CentosOneInstall struct{}
 
-func (tpl *CentOsOneInstall) Render(p urknall.Package) {
-	p.AddTemplate("one", &CentOsOneInstallTemplate{})
+func (tpl *CentosOneInstall) Render(p urknall.Package) {
+	p.AddTemplate("one", &CentosOneInstallTemplate{})
 }
 
-func (tpl *CentOsOneInstall) Options(t *templates.Template) {}
+func (tpl *CentosOneInstall) Options(t *templates.Template) {}
 
-func (tpl *CentOsOneInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsOneInstall{})
+func (tpl *CentosOneInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosOneInstall{})
 }
 
-type CentOsOneInstallTemplate struct{}
+type CentosOneInstallTemplate struct{}
 
-func (m *CentOsOneInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosOneInstallTemplate) Render(pkg urknall.Package) {
 
 	ip := IP("")
 

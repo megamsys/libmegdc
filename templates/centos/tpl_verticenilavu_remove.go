@@ -21,29 +21,29 @@ import (
 "github.com/megamsys/libmegdc/templates"
 )
 
-var centosnilavuremove *CentOsNilavuRemove
+var centosnilavuremove *CentosNilavuRemove
 
 func init() {
-	centosnilavuremove = &CentOsNilavuRemove{}
-	templates.Register("CentOsNilavuRemove", centosnilavuremove)
+	centosnilavuremove = &CentosNilavuRemove{}
+	templates.Register("CentosNilavuRemove", centosnilavuremove)
 }
 
-type CentOsNilavuRemove struct{}
+type CentosNilavuRemove struct{}
 
-func (tpl *CentOsNilavuRemove) Render(p urknall.Package) {
-	p.AddTemplate("nilavu", &CentOsNilavuRemoveTemplate{})
+func (tpl *CentosNilavuRemove) Render(p urknall.Package) {
+	p.AddTemplate("nilavu", &CentosNilavuRemoveTemplate{})
 }
 
-func (tpl *CentOsNilavuRemove) Options(t *templates.Template) {
+func (tpl *CentosNilavuRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsNilavuRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsNilavuRemove{})
+func (tpl *CentosNilavuRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosNilavuRemove{})
 }
 
-type CentOsNilavuRemoveTemplate struct{}
+type CentosNilavuRemoveTemplate struct{}
 
-func (m *CentOsNilavuRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosNilavuRemoveTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("verticenilavu",
 		RemovePackage("verticenilavu"),
 		RemovePackages(""),

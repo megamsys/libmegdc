@@ -21,29 +21,29 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centosgatewayinstall *CentOsGatewayInstall
+var centosgatewayinstall *CentosGatewayInstall
 
 func init() {
-	centosgatewayinstall = &CentOsGatewayInstall{}
-	templates.Register("CentOsGatewayInstall", centosgatewayinstall)
+	centosgatewayinstall = &CentosGatewayInstall{}
+	templates.Register("CentosGatewayInstall", centosgatewayinstall)
 }
 
-type CentOsGatewayInstall struct{}
+type CentosGatewayInstall struct{}
 
-func (tpl *CentOsGatewayInstall) Render(p urknall.Package) {
-	p.AddTemplate("gateway", &CentOsGatewayInstallTemplate{})
+func (tpl *CentosGatewayInstall) Render(p urknall.Package) {
+	p.AddTemplate("gateway", &CentosGatewayInstallTemplate{})
 }
 
-func (tpl *CentOsGatewayInstall) Options(t *templates.Template) {
+func (tpl *CentosGatewayInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsGatewayInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsGatewayInstall{})
+func (tpl *CentosGatewayInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosGatewayInstall{})
 }
 
-type CentOsGatewayInstallTemplate struct{}
+type CentosGatewayInstallTemplate struct{}
 
-func (m *CentOsGatewayInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosGatewayInstallTemplate) Render(pkg urknall.Package) {
 	//fail on Java -version (1.8 check)
 	pkg.AddCommands("repository",
 		Shell("echo 'deb [arch=amd64] "+DefaultMegamRepo+"' > "+ListFilePath),

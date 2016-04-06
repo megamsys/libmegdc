@@ -23,29 +23,29 @@ import (
 
 )
 
-var centosverticeinstall *CentOsMegamdInstall
+var centosverticeinstall *CentosMegamdInstall
 
 func init() {
-	centosverticeinstall = &CentOsMegamdInstall{}
-	templates.Register("CentOsMegamdInstall", centosverticeinstall)
+	centosverticeinstall = &CentosMegamdInstall{}
+	templates.Register("CentosMegamdInstall", centosverticeinstall)
 }
 
-type CentOsMegamdInstall struct{}
+type CentosMegamdInstall struct{}
 
-func (tpl *CentOsMegamdInstall) Render(p urknall.Package) {
-	p.AddTemplate("vertice", &CentOsMegamdInstallTemplate{})
+func (tpl *CentosMegamdInstall) Render(p urknall.Package) {
+	p.AddTemplate("vertice", &CentosMegamdInstallTemplate{})
 }
 
-func (tpl *CentOsMegamdInstall) Options(t *templates.Template) {
+func (tpl *CentosMegamdInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsMegamdInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsMegamdInstall{})
+func (tpl *CentosMegamdInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosMegamdInstall{})
 }
 
-type CentOsMegamdInstallTemplate struct{}
+type CentosMegamdInstallTemplate struct{}
 
-func (m *CentOsMegamdInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosMegamdInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("repository",
 		Shell("echo 'deb [arch=amd64] "+DefaultMegamRepo+"' > "+ListFilePath),

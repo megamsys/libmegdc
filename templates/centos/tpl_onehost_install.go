@@ -26,29 +26,29 @@ const (
 	ONEHOST_INSTALL_LOG = "/var/log/megam/megamcib/opennebulahost.log"
 )
 
-var centosonehostinstall *CentOsOneHostInstall
+var centosonehostinstall *CentosOneHostInstall
 
 func init() {
-	centosonehostinstall = &CentOsOneHostInstall{}
-	templates.Register("CentOsOneHostInstall", centosonehostinstall)
+	centosonehostinstall = &CentosOneHostInstall{}
+	templates.Register("CentosOneHostInstall", centosonehostinstall)
 }
 
-type CentOsOneHostInstall struct{}
+type CentosOneHostInstall struct{}
 
-func (tpl *CentOsOneHostInstall) Render(p urknall.Package) {
-	p.AddTemplate("onehost", &CentOsOneHostInstallTemplate{})
+func (tpl *CentosOneHostInstall) Render(p urknall.Package) {
+	p.AddTemplate("onehost", &CentosOneHostInstallTemplate{})
 }
 
-func (tpl *CentOsOneHostInstall) Options(t *templates.Template) {
+func (tpl *CentosOneHostInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsOneHostInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsOneHostInstall{})
+func (tpl *CentosOneHostInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosOneHostInstall{})
 }
 
-type CentOsOneHostInstallTemplate struct{}
+type CentosOneHostInstallTemplate struct{}
 
-func (m *CentOsOneHostInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosOneHostInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("repository",
 		Shell("wget -q -O- http://downloads.opennebula.org/repo/Ubuntu/repo.key | apt-key add -"),
 		Shell("echo 'deb http://downloads.opennebula.org/repo/4.14/Ubuntu/14.04 stable opennebula' > /etc/apt/sources.list.d/opennebula.list"),

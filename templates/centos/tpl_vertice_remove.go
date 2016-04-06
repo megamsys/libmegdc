@@ -21,29 +21,29 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centosverticeremove *CentOsMegamdRemove
+var centosverticeremove *CentosMegamdRemove
 
 func init() {
-	centosverticeremove = &CentOsMegamdRemove{}
-	templates.Register("CentOsMegamdRemove", centosverticeremove)
+	centosverticeremove = &CentosMegamdRemove{}
+	templates.Register("CentosMegamdRemove", centosverticeremove)
 }
 
-type CentOsMegamdRemove struct{}
+type CentosMegamdRemove struct{}
 
-func (tpl *CentOsMegamdRemove) Render(p urknall.Package) {
-	p.AddTemplate("vertice", &CentOsMegamdRemoveTemplate{})
+func (tpl *CentosMegamdRemove) Render(p urknall.Package) {
+	p.AddTemplate("vertice", &CentosMegamdRemoveTemplate{})
 }
 
-func (tpl *CentOsMegamdRemove) Options(t *templates.Template) {
+func (tpl *CentosMegamdRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsMegamdRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsMegamdRemove{})
+func (tpl *CentosMegamdRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosMegamdRemove{})
 }
 
-type CentOsMegamdRemoveTemplate struct{}
+type CentosMegamdRemoveTemplate struct{}
 
-func (m *CentOsMegamdRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosMegamdRemoveTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("vertice",
 		RemovePackage("vertice"),

@@ -22,29 +22,29 @@ import (
 
 )
 
-var centosoneremove *CentOsOneRemove
+var centosoneremove *CentosOneRemove
 
 func init() {
-	centosoneremove = &CentOsOneRemove{}
-	templates.Register("CentOsOneRemove", centosoneremove)
+	centosoneremove = &CentosOneRemove{}
+	templates.Register("CentosOneRemove", centosoneremove)
 }
 
-type CentOsOneRemove struct{}
+type CentosOneRemove struct{}
 
-func (tpl *CentOsOneRemove) Render(p urknall.Package) {
-	p.AddTemplate("one", &CentOsOneRemoveTemplate{})
+func (tpl *CentosOneRemove) Render(p urknall.Package) {
+	p.AddTemplate("one", &CentosOneRemoveTemplate{})
 }
 
-func (tpl *CentOsOneRemove) Options(t *templates.Template) {
+func (tpl *CentosOneRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsOneRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsOneRemove{})
+func (tpl *CentosOneRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosOneRemove{})
 }
 
-type CentOsOneRemoveTemplate struct{}
+type CentosOneRemoveTemplate struct{}
 
-func (m *CentOsOneRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosOneRemoveTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("one",
 		RemovePackage("opennebula opennebula-sunstone"),
 		RemovePackages(""),
