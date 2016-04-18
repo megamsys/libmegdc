@@ -37,7 +37,7 @@ type CentosCreateVolume struct {
 	}
 
 func (tpl *CentosCreateVolume) Options(t *templates.Template) {
-	if disk, ok := t.Options[Disk]; ok {
+  if disk, ok := t.Options[Disk]; ok {
 		tpl.disk = disk
 	}
 }

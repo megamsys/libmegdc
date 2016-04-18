@@ -17,6 +17,7 @@
 package centos
 
 import (
+	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 	//"github.com/megamsys/libgo/cmd"
@@ -24,7 +25,24 @@ import (
 
 const (
 	Bridgename     = "Bridgename"
-  Port    = "Port"
+  PhyDev    = "PhyDev"
+
+	Netmask  = "Netmask"
+	Gateway   = "Gateway"
+
+	 Ifcfgeth0 = `
+	 DEVICE=%s
+ONBOOT=yes
+BRIDGE=%s`
+ Ifcfgone = `
+ DEVICE=%s
+TYPE=Bridge
+BOOTPROTO=static
+IPADDR=%s
+NETMASK=%s
+GATEWAY=%s
+ONBOOT=yes
+STP=no`
 	)
 
 var centoscreatebridge *CentosCreateBridge
@@ -36,40 +54,63 @@ func init() {
 
 type CentosCreateBridge struct {
 	bridgename      string
-  port       string
+  phydev       string
+	netmask      string
+	gateway      string
+
 	}
 
 func (tpl *CentosCreateBridge) Options(t *templates.Template) {
 	if bridgename, ok := t.Options[Bridgename]; ok {
 		tpl.bridgename = bridgename
 	}
-  if port, ok := t.Options[Port]; ok {
-		tpl.port = port
+  if phydev, ok := t.Options[PhyDev]; ok {
+		tpl.phydev = phydev
 	}
+
+	if netmask, ok := t.Options[Netmask]; ok {
+		tpl.netmask = netmask
+	}
+
+	if gateway, ok := t.Options[Gateway]; ok {
+		tpl.gateway = gateway
+	}
+
 }
 
 func (tpl *CentosCreateBridge) Render(p urknall.Package) {
 	p.AddTemplate("bridge", &CentosCreateBridgeTemplate{
 		bridgename:     tpl.bridgename,
-    port:    tpl.port,
+    phydev:    tpl.phydev,
+		netmask:   tpl.netmask,
+		gateway:   tpl.gateway,
+
 		})
 }
 
 func (tpl *CentosCreateBridge) Run(target urknall.Target) error {
 	return urknall.Run(target, &CentosCreateBridge{
 		bridgename:     tpl.bridgename,
-    port:     tpl.port,
+    phydev:     tpl.phydev,
+		netmask:   tpl.netmask,
+		gateway:   tpl.gateway,
+
 	})
 }
 
 type CentosCreateBridgeTemplate struct {
   bridgename     string
-  port    string
+  phydev    string
+	netmask string
+	gateway string
 }
 
 func (m *CentosCreateBridgeTemplate) Render(pkg urknall.Package) {
+	ip := IP("")
 	bridgename := m.bridgename
-  port := m.port
+  phydev := m.phydev
+	netmask := m.netmask
+	gateway := m.gateway
 
 	pkg.AddCommands("bridgeutils",
 		 Shell("yum install -y bridge-utils"),
@@ -77,8 +118,15 @@ func (m *CentosCreateBridgeTemplate) Render(pkg urknall.Package) {
 	 pkg.AddCommands("create-bridge",
  	 Shell("brctl addbr "+bridgename+""),
  	)
- 	pkg.AddCommands("add-port",
- 		Shell("brctl addif "+bridgename+" "+port+""),
- 	)
+	pkg.AddCommands("interfaces",
+  WriteFile("/etc/sysconfig/network-scripts/ifcfg-"+phydev+"", fmt.Sprintf(Ifcfgeth0, phydev, bridgename ), "root", 0644),
+	WriteFile("/etc/sysconfig/network-scripts/ifcfg-"+bridgename+"", fmt.Sprintf(Ifcfgone, bridgename, ip, netmask, gateway ), "root", 0644),
+	)
+	pkg.AddCommands("network",
+	 Shell("service network restart"),
+	)
+	pkg.AddCommands("list-bridge",
+   Shell("brctl show"),
+	)
 
 }

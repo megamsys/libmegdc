@@ -60,6 +60,9 @@ func (m *DebianHostInfoTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("hostname",
 		u.Shell("hostname"),
 	)
+	pkg.AddCommands("dnsserver",
+		u.Shell("cat /etc/resolv.conf"),
+	)
   pkg.AddCommands("ipaddress",
 		u.Shell("ifconfig"),
 	)

@@ -50,9 +50,7 @@ type CentosOneHostInstallTemplate struct{}
 
 func (m *CentosOneHostInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("repository",
-		Shell("wget -q -O- http://downloads.opennebula.org/repo/Ubuntu/repo.key | apt-key add -"),
-		Shell("echo 'deb http://downloads.opennebula.org/repo/4.14/Ubuntu/14.04 stable opennebula' > /etc/apt/sources.list.d/opennebula.list"),
-		UpdatePackagesOmitError(),
+	Shell("if [ -f /etc/os-release ] ; then  echo '[opennebula]' >/etc/yum.repos.d/opennebula.repo; echo 'name=opennebula' >>/etc/yum.repos.d/opennebula.repo; echo 'baseurl=http://downloads.opennebula.org/repo/4.12/CentOS/7/x86_64/' >>/etc/yum.repos.d/opennebula.repo; echo 'enabled=1' >>/etc/yum.repos.d/opennebula.repo; echo 'gpgcheck=0' >>/etc/yum.repos.d/opennebula.repo; else echo '[opennebula]' >/etc/yum.repos.d/opennebula.repo; echo 'name=opennebula' >>/etc/yum.repos.d/opennebula.repo; echo 'baseurl=http://downloads.opennebula.org/repo/4.14/CentOS/6/x86_64/' >>/etc/yum.repos.d/opennebula.repo; echo 'enabled=1' >>/etc/yum.repos.d/opennebula.repo; echo 'gpgcheck=0' >>/etc/yum.repos.d/opennebula.repo ; fi"),
 	)
 	pkg.AddCommands("depends",
 		InstallPackages("build-essential genromfs autoconf libtool qemu-utils libvirt0 bridge-utils lvm2 ssh iproute iputils-arping make"),
@@ -60,11 +58,11 @@ func (m *CentosOneHostInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("verify",
 		InstallPackages("qemu-system-x86 qemu-kvm cpu-checker"),
-		And("kvm=`kvm-ok  | grep 'KVM acceleration can be used'`"),
+		And("grep -E 'svm|vmx' /proc/cpuinfo"),
 	)
 
 	pkg.AddCommands("one-node",
-		InstallPackages("opennebula-node"),
+		InstallPackages("opennebula-node-kvm"),
 	)
   pkg.AddCommands("node",
 		Shell("sudo usermod -p $(echo oneadmin | openssl passwd -1 -stdin) oneadmin"),
@@ -72,5 +70,10 @@ func (m *CentosOneHostInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("vswitch",
 		InstallPackages("openvswitch-common openvswitch-switch bridge-utils"),
 	)
-
+  pkg.AddCommands("start",
+		Shell("systemctl start messagebus.service"),
+   Shell("systemctl start libvirtd.service"),
+	 Shell("systemctl start libvirtd.service"),
+	 Shell("systemctl start nfs.service"),
+	)
 }

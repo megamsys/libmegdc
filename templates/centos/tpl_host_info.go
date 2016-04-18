@@ -61,6 +61,9 @@ func (m *CentosHostInfoTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("hostname",
 		Shell("hostname"),
 	)
+	pkg.AddCommands("dnsserver",
+		Shell("cat /etc/resolv.conf"),
+	)
 	pkg.AddCommands("ipaddress",
 		Shell("yum install -y net-tools"),
 		Shell("ifconfig"),

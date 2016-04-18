@@ -72,7 +72,7 @@ func (m *CentosSshPassTemplate) Render(pkg urknall.Package) {
 	  InstallPackages("sshpass"),
 	)
 	pkg.AddCommands("SSHPass",
-		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_rsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
+		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_dsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
     WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 	)
 }
