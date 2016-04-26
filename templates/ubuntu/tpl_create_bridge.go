@@ -134,12 +134,12 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("bridgeutils",
 		 Shell("apt-get install -y bridge-utils"),
 		 )
-	 pkg.AddCommands("create-bridge",
- 	 Shell("brctl addbr "+bridgename+""),
- 	)
 	pkg.AddCommands("interfaces",
   WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
 	)
+	pkg.AddCommands("create-bridge",
+	Shell("brctl addbr "+bridgename+""),
+ )
 	pkg.AddCommands("list-bridge",
    Shell("brctl show"),
 	)
