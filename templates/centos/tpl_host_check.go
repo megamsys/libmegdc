@@ -18,39 +18,35 @@ package centos
 
 import (
 	"github.com/megamsys/libmegdc/templates"
+
 	"github.com/megamsys/urknall"
 
 )
 
-var centosoneremove *CentosOneRemove
+var centoshostcheck *CentosHostCheck
 
 func init() {
-	centosoneremove = &CentosOneRemove{}
-	templates.Register("CentosOneRemove", centosoneremove)
+	centoshostcheck = &CentosHostCheck{}
+	templates.Register("CentosHostCheck", centoshostcheck)
 }
 
-type CentosOneRemove struct{}
+type CentosHostCheck struct{}
 
-func (tpl *CentosOneRemove) Render(p urknall.Package) {
-	p.AddTemplate("one", &CentosOneRemoveTemplate{})
+func (tpl *CentosHostCheck) Render(p urknall.Package) {
+	p.AddTemplate("hostcheck", &CentosHostCheckTemplate{})
 }
 
-func (tpl *CentosOneRemove) Options(t *templates.Template) {
+func (tpl *CentosHostCheck) Options(t *templates.Template) {
 }
 
-func (tpl *CentosOneRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosOneRemove{})
+func (tpl *CentosHostCheck) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosHostCheck{})
 }
 
-type CentosOneRemoveTemplate struct{}
+type CentosHostCheckTemplate struct{}
 
-func (m *CentosOneRemoveTemplate) Render(pkg urknall.Package) {
-	pkg.AddCommands("one",
-		RemovePackage("opennebula opennebula-sunstone"),
-		RemovePackages(""),
-
-	)
-	pkg.AddCommands("one-clean",
-		Shell("rm -rf /var/lib/urknall/one.*"),
+func (m *CentosHostCheckTemplate) Render(pkg urknall.Package) {
+	pkg.AddCommands("vtenable",
+		Shell("grep -E 'svm|vmx' /proc/cpuinfo"),
 	)
 }

@@ -22,29 +22,29 @@ import (
 )
 
 
-var centosverticecommoninstall *CentOsMegamCommonInstall
+var centosverticecommoninstall *CentosMegamCommonInstall
 
 func init() {
-	centosverticecommoninstall = &CentOsMegamCommonInstall{}
-	templates.Register("CentOsMegamCommonInstall", centosverticecommoninstall)
+	centosverticecommoninstall = &CentosMegamCommonInstall{}
+	templates.Register("CentosMegamCommonInstall", centosverticecommoninstall)
 }
 
-type CentOsMegamCommonInstall struct{}
+type CentosMegamCommonInstall struct{}
 
-func (tpl *CentOsMegamCommonInstall) Render(p urknall.Package) {
-	p.AddTemplate("common", &CentOsMegamCommonInstallTemplate{})
+func (tpl *CentosMegamCommonInstall) Render(p urknall.Package) {
+	p.AddTemplate("common", &CentosMegamCommonInstallTemplate{})
 }
 
-func (tpl *CentOsMegamCommonInstall) Options(t *templates.Template) {
+func (tpl *CentosMegamCommonInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsMegamCommonInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsMegamCommonInstall{})
+func (tpl *CentosMegamCommonInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosMegamCommonInstall{})
 }
 
-type CentOsMegamCommonInstallTemplate struct{}
+type CentosMegamCommonInstallTemplate struct{}
 
-func (m *CentOsMegamCommonInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosMegamCommonInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("repository",
 		Shell("echo 'deb [arch=amd64] " + DefaultMegamRepo + "' > " + ListFilePath),

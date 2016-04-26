@@ -22,29 +22,29 @@ import (
 
 )
 
-var centosonehostremove *CentOsOneHostRemove
+var centosonehostremove *CentosOneHostRemove
 
 func init() {
-	centosonehostremove = &CentOsOneHostRemove{}
-	templates.Register("CentOsOneHostRemove", centosonehostremove)
+	centosonehostremove = &CentosOneHostRemove{}
+	templates.Register("CentosOneHostRemove", centosonehostremove)
 }
 
-type CentOsOneHostRemove struct{}
+type CentosOneHostRemove struct{}
 
-func (tpl *CentOsOneHostRemove) Render(p urknall.Package) {
-	p.AddTemplate("onehost", &CentOsOneHostRemoveTemplate{})
+func (tpl *CentosOneHostRemove) Render(p urknall.Package) {
+	p.AddTemplate("onehost", &CentosOneHostRemoveTemplate{})
 }
 
-func (tpl *CentOsOneHostRemove) Options(t *templates.Template) {
+func (tpl *CentosOneHostRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsOneHostRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsOneHostRemove{})
+func (tpl *CentosOneHostRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosOneHostRemove{})
 }
 
-type CentOsOneHostRemoveTemplate struct{}
+type CentosOneHostRemoveTemplate struct{}
 
-func (m *CentOsOneHostRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosOneHostRemoveTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("onehost",
 		RemovePackage("opennebula-node openvswitch-common openvswitch-switch bridge-utils sshpass"),
 		RemovePackages(""),

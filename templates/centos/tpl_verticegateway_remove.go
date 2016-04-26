@@ -21,29 +21,29 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centosgatewayremove *CentOsGatewayRemove
+var centosgatewayremove *CentosGatewayRemove
 
 func init() {
-	centosgatewayremove = &CentOsGatewayRemove{}
-	templates.Register("CentOsGatewayRemove", centosgatewayremove)
+	centosgatewayremove = &CentosGatewayRemove{}
+	templates.Register("CentosGatewayRemove", centosgatewayremove)
 }
 
-type CentOsGatewayRemove struct{}
+type CentosGatewayRemove struct{}
 
-func (tpl *CentOsGatewayRemove) Render(p urknall.Package) {
-	p.AddTemplate("gateway", &CentOsGatewayRemoveTemplate{})
+func (tpl *CentosGatewayRemove) Render(p urknall.Package) {
+	p.AddTemplate("gateway", &CentosGatewayRemoveTemplate{})
 }
 
-func (tpl *CentOsGatewayRemove) Options(t *templates.Template) {
+func (tpl *CentosGatewayRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsGatewayRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsGatewayRemove{})
+func (tpl *CentosGatewayRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosGatewayRemove{})
 }
 
-type CentOsGatewayRemoveTemplate struct{}
+type CentosGatewayRemoveTemplate struct{}
 
-func (m *CentOsGatewayRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosGatewayRemoveTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("verticegateway",
 		RemovePackage("verticegateway"),
 		RemovePackages(""),

@@ -26,19 +26,19 @@ const (
 	PHY_DEV     = "PhyDev"
 )
 
-var centoscreatenetwork *CentOsCreateNetwork
+var centoscreatenetwork *CentosCreateNetwork
 
 func init() {
-	centoscreatenetwork = &CentOsCreateNetwork{}
-	templates.Register("CentOsCreateNetwork", centoscreatenetwork)
+	centoscreatenetwork = &CentosCreateNetwork{}
+	templates.Register("CentosCreateNetwork", centoscreatenetwork)
 }
 
-type CentOsCreateNetwork struct {
+type CentosCreateNetwork struct {
 	BridgeName string
 	PhyDev     string
 }
 
-func (tpl *CentOsCreateNetwork) Options(t *templates.Template) {
+func (tpl *CentosCreateNetwork) Options(t *templates.Template) {
 	if bg, ok := t.Options[BRIDGE_NAME]; ok {
 		tpl.BridgeName = bg
 	}
@@ -48,26 +48,26 @@ func (tpl *CentOsCreateNetwork) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *CentOsCreateNetwork) Render(p urknall.Package) {
-	p.AddTemplate("createnetwork", &CentOsCreateNetworkTemplate{
+func (tpl *CentosCreateNetwork) Render(p urknall.Package) {
+	p.AddTemplate("createnetwork", &CentosCreateNetworkTemplate{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,
 	})
 }
 
-func (tpl *CentOsCreateNetwork) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsCreateNetwork{
+func (tpl *CentosCreateNetwork) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosCreateNetwork{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,
 	})
 }
 
-type CentOsCreateNetworkTemplate struct {
+type CentosCreateNetworkTemplate struct {
 	BridgeName string
 	PhyDev     string
 }
 
-func (m *CentOsCreateNetworkTemplate) Render(pkg urknall.Package) {
+func (m *CentosCreateNetworkTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("ovs-createnetwork",
 		Shell("sudo echo '"+"%"+"oneadmin ALL=(root) NOPASSWD: /usr/bin/ovs-vsctl' > //etc/sudoers.d/openvswitch"),
 		Shell("sudo echo '"+"%"+"oneadmin ALL=(root) NOPASSWD: /usr/bin/ovs-ofctl' >> //etc/sudoers.d/openvswitch"),

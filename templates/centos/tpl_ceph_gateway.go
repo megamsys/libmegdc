@@ -21,7 +21,7 @@ import (
 	"os"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	
+
 	//"github.com/megamsys/libgo/cmd"
 )
 
@@ -71,33 +71,33 @@ ServerSignature Off
 `
 )
 
-var centoscephgateway *CentOsCephGateway
+var centoscephgateway *CentosCephGateway
 
 func init() {
-	centoscephgateway = &CentOsCephGateway{}
-	templates.Register("CentOsCephGateway", centoscephgateway)
+	centoscephgateway = &CentosCephGateway{}
+	templates.Register("CentosCephGateway", centoscephgateway)
 }
 
-type CentOsCephGateway struct {
+type CentosCephGateway struct {
 }
 
-func (tpl *CentOsCephGateway) Options(t *templates.Template) {
+func (tpl *CentosCephGateway) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsCephGateway) Render(p urknall.Package) {
-	p.AddTemplate("ceph", &CentOsCephGatewayTemplate{
+func (tpl *CentosCephGateway) Render(p urknall.Package) {
+	p.AddTemplate("ceph", &CentosCephGatewayTemplate{
 	})
 }
 
-func (tpl *CentOsCephGateway) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsCephGateway{
+func (tpl *CentosCephGateway) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosCephGateway{
 	})
 }
 
-type CentOsCephGatewayTemplate struct {
+type CentosCephGatewayTemplate struct {
 }
 
-func (m *CentOsCephGatewayTemplate) Render(pkg urknall.Package) {
+func (m *CentosCephGatewayTemplate) Render(pkg urknall.Package) {
 host, _ := os.Hostname()
 	pkg.AddCommands("apache2",
 		UpdatePackagesOmitError(),

@@ -27,29 +27,29 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centosverticereport *CentOsVerticeReport
+var centosverticereport *CentosVerticeReport
 
 func init() {
-	centosverticereport = &CentOsVerticeReport{}
-	templates.Register("CentOsVerticeReport", centosverticereport)
+	centosverticereport = &CentosVerticeReport{}
+	templates.Register("CentosVerticeReport", centosverticereport)
 }
 
-type CentOsVerticeReport struct{}
+type CentosVerticeReport struct{}
 
-func (tpl *CentOsVerticeReport) Render(p urknall.Package) {
-	p.AddTemplate("report", &CentOsVerticeReportTemplate{})
+func (tpl *CentosVerticeReport) Render(p urknall.Package) {
+	p.AddTemplate("report", &CentosVerticeReportTemplate{})
 }
 
-func (tpl *CentOsVerticeReport) Options(t *templates.Template) {
+func (tpl *CentosVerticeReport) Options(t *templates.Template) {
 }
 
-func (tpl *CentOsVerticeReport) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsVerticeReport{})
+func (tpl *CentosVerticeReport) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosVerticeReport{})
 }
 
-type CentOsVerticeReportTemplate struct{}
+type CentosVerticeReportTemplate struct{}
 
-func (m *CentOsVerticeReportTemplate) Render(pkg urknall.Package) {
+func (m *CentosVerticeReportTemplate) Render(pkg urknall.Package) {
 
 	if err := writefile(); err != nil {
 		return

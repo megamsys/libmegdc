@@ -30,25 +30,25 @@ const (
 	`
 )
 
-var centossshpass *CentOsSshPass
+var centossshpass *CentosSshPass
 
 func init() {
-	centossshpass = &CentOsSshPass{}
+	centossshpass = &CentosSshPass{}
 	templates.Register("CentosSshPass", centossshpass)
 }
 
-type CentOsSshPass struct{
+type CentosSshPass struct{
 	Host string
 }
 
 
-func (tpl *CentOsSshPass) Render(p urknall.Package) {
-	p.AddTemplate("sshpass", &CentOsSshPassTemplate{
+func (tpl *CentosSshPass) Render(p urknall.Package) {
+	p.AddTemplate("sshpass", &CentosSshPassTemplate{
 		Host: tpl.Host,
 	})
 }
 
-func (tpl *CentOsSshPass) Options(t *templates.Template) {
+func (tpl *CentosSshPass) Options(t *templates.Template) {
 
 if hs, ok := t.Options["HOST"]; ok {
 	tpl.Host = hs
@@ -56,23 +56,23 @@ if hs, ok := t.Options["HOST"]; ok {
 }
 
 
-func (tpl *CentOsSshPass) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsSshPass{
+func (tpl *CentosSshPass) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosSshPass{
 		Host: tpl.Host,
 	})
 }
 
-type CentOsSshPassTemplate struct{
+type CentosSshPassTemplate struct{
 	Host string
 }
 
-func (m *CentOsSshPassTemplate) Render(pkg urknall.Package) {
+func (m *CentosSshPassTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("install-sshpass",
 	  InstallPackages("sshpass"),
 	)
 	pkg.AddCommands("SSHPass",
-		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_rsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
+		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_dsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
     WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 	)
 }

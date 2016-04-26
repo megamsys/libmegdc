@@ -50,20 +50,20 @@ mon_pg_warn_max_per_osd = 0
 `
 )
 
-var centoscephinstall *CentOsCephInstall
+var centoscephinstall *CentosCephInstall
 
 func init() {
-	centoscephinstall = &CentOsCephInstall{}
-	templates.Register("CentOsCephInstall", centoscephinstall)
+	centoscephinstall = &CentosCephInstall{}
+	templates.Register("CentosCephInstall", centoscephinstall)
 }
 
-type CentOsCephInstall struct {
+type CentosCephInstall struct {
 	osds      []string
 	cephuser string
 	phydev    string
 }
 
-func (tpl *CentOsCephInstall) Options(t *templates.Template) {
+func (tpl *CentosCephInstall) Options(t *templates.Template) {
 	if osds, ok := t.Maps[Osd]; ok {
 		tpl.osds = osds
 	}
@@ -75,8 +75,8 @@ func (tpl *CentOsCephInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *CentOsCephInstall) Render(p urknall.Package) {
-	p.AddTemplate("ceph", &CentOsCephInstallTemplate{
+func (tpl *CentosCephInstall) Render(p urknall.Package) {
+	p.AddTemplate("ceph", &CentosCephInstallTemplate{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
 		cephhome: UserHomePrefix + tpl.cephuser,
@@ -84,8 +84,8 @@ func (tpl *CentOsCephInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentOsCephInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsCephInstall{
+func (tpl *CentosCephInstall) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosCephInstall{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
 		phydev:    tpl.phydev,
@@ -93,14 +93,14 @@ func (tpl *CentOsCephInstall) Run(target urknall.Target) error {
 	})
 }
 
-type CentOsCephInstallTemplate struct {
+type CentosCephInstallTemplate struct {
   osds     []string
 	cephuser string
 	cephhome string
 	phydev    string
 }
 
-func (m *CentOsCephInstallTemplate) Render(pkg urknall.Package) {
+func (m *CentosCephInstallTemplate) Render(pkg urknall.Package) {
 	host, _ := os.Hostname()
 	ip := IP(m.phydev)
   osddir := ArraytoString("/","/osd",m.osds)
@@ -169,18 +169,18 @@ func (m *CentOsCephInstallTemplate) Render(pkg urknall.Package) {
 	)
 }
 
-func (m *CentOsCephInstallTemplate) noOfIpsFromMask() int {
+func (m *CentosCephInstallTemplate) noOfIpsFromMask() int {
 	si, _ := IPNet(m.phydev).Mask.Size() //from your netwwork
 	return si
 }
 
-func (m *CentOsCephInstallTemplate) slashIp() string {
+func (m *CentosCephInstallTemplate) slashIp() string {
 	s := strings.Split(IP(m.phydev), ".")
 	p := s[0 : len(s)-1]
 	p = append(p, "0")
 	return fmt.Sprintf("%s/%d", strings.Join(p, "."), m.noOfIpsFromMask())
 }
 
-func (m *CentOsCephInstallTemplate) osdPoolSize(osds ...string) int {
+func (m *CentosCephInstallTemplate) osdPoolSize(osds ...string) int {
 	return len(osds)
 }

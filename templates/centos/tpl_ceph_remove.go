@@ -23,39 +23,39 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-var centoscephremove *CentOsCephRemove
+var centoscephremove *CentosCephRemove
 
 func init() {
-	centoscephremove = &CentOsCephRemove{}
-	templates.Register("CentOsCephRemove", centoscephremove)
+	centoscephremove = &CentosCephRemove{}
+	templates.Register("CentosCephRemove", centoscephremove)
 }
 
-type CentOsCephRemove struct {
+type CentosCephRemove struct {
 	cephuser string
 }
 
-func (tpl *CentOsCephRemove) Options(t *templates.Template) {
+func (tpl *CentosCephRemove) Options(t *templates.Template) {
 	if cephuser, ok := t.Options[CephUser]; ok {
 		tpl.cephuser = cephuser
 	}
 }
-func (tpl *CentOsCephRemove) Render(p urknall.Package) {
-	p.AddTemplate("ceph", &CentOsCephRemoveTemplate{
+func (tpl *CentosCephRemove) Render(p urknall.Package) {
+	p.AddTemplate("ceph", &CentosCephRemoveTemplate{
         cephuser: tpl.cephuser,
 })
 }
 
-func (tpl *CentOsCephRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentOsCephRemove{
+func (tpl *CentosCephRemove) Run(target urknall.Target) error {
+	return urknall.Run(target, &CentosCephRemove{
 		cephuser: tpl.cephuser,
 	})
 }
 
-type CentOsCephRemoveTemplate struct {
+type CentosCephRemoveTemplate struct {
 	cephuser string
 }
 
-func (m *CentOsCephRemoveTemplate) Render(pkg urknall.Package) {
+func (m *CentosCephRemoveTemplate) Render(pkg urknall.Package) {
 	host, _ := os.Hostname()
 
 	CephUser := m.cephuser
