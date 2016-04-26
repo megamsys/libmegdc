@@ -137,12 +137,12 @@ func (m *DebianCreateBridgeTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("bridgeutils",
 		 u.Shell("apt-get install -y bridge-utils"),
 		 )
-	 pkg.AddCommands("create-bridge",
- 	 u.Shell("brctl addbr "+bridgename+""),
- 	)
 	pkg.AddCommands("interfaces",
   u.WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2 ), "root", 0644),
 	)
+	pkg.AddCommands("create-bridge",
+	u.Shell("brctl addbr "+bridgename+""),
+ )
 	pkg.AddCommands("list-bridge",
    u.Shell("brctl show"),
 	)
