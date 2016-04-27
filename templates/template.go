@@ -19,9 +19,10 @@ package templates
 import (
 	"errors"
 	"fmt"
-	"os"
+//	"os"
 	"strings"
 	"sync"
+	"io"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/urknall"
@@ -49,8 +50,8 @@ func NewTemplate() *Template {
 	return &Template{}
 }
 
-func (t *Template) Run() error {
-	defer urknall.OpenLogger(os.Stdout).Close()
+func (t *Template) Run(w io.Writer) error {
+	defer urknall.OpenLogger(w).Close()
 	var target urknall.Target
 	var err error
 	if t.Password != "" {
