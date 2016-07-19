@@ -45,28 +45,34 @@ type UbuntuHostInfoTemplate struct{}
 func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("disk",
-		Shell("df -h"),
+		Shell("df -h | grep \"/dev/sd\""),
 	)
   pkg.AddCommands("memory",
     Shell("free -m"),
   )
   pkg.AddCommands("blockdevices",
-		Shell("lsblk"),
+		Shell("lsblk | grep sd"),
 	)
   pkg.AddCommands("cpu",
-		Shell("lscpu"),
+		Shell("lscpu | grep \"CPU(s):\" "),
 	)
   pkg.AddCommands("hostname",
 		Shell("hostname"),
 	)
 	pkg.AddCommands("dnsserver",
-		Shell("cat /etc/resolv.conf"),
+		Shell("cat /etc/resolv.conf | grep nameserver"),
 	)
   pkg.AddCommands("ipaddress",
-		Shell("ifconfig"),
+		Shell("ifconfig | grep addr:"),
 	)
 	pkg.AddCommands("bridge",
-  	Shell("if /sbin/brctl ; then brctl show; else echo 'no bridge is available'; fi"),
+  	Shell("if [ -f /sbin/brctl ] ; then brctl show; else echo 'brctl not installed'; fi"),
+		)
+  pkg.AddCommands("os",
+  	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
 		)
 
 }
+
+
+
