@@ -71,7 +71,9 @@ func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("os",
   	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
 		)
-
+    pkg.AddCommands("clear-log",
+  	Shell("rm -rf /var/lib/urknall/hostinfo.*"),
+		)
 }
 
 
