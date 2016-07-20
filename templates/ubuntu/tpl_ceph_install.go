@@ -113,7 +113,7 @@ func (m *UbuntuCephInstallTemplate) Render(pkg urknall.Package) {
 		 Shell("wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -"),
 		 InstallPackages("apt-transport-https  sudo"),
 		 UpdatePackagesOmitError(),
-		 InstallPackages("ceph-deploy ceph-common ceph-mds dnsmasq openssh-server ntp sshpass ceph ceph-mds ceph-deploy radosgw"),
+		 InstallPackages("ceph-deploy ceph-common ceph-mds dnsmasq openssh-server ntp sshpass ceph radosgw"),
 	 )
 
 	 pkg.AddCommands("cephuser_add",
