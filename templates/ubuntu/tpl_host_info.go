@@ -59,15 +59,6 @@ func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("hostname",
 		Shell("hostname"),
 	)
-	pkg.AddCommands("dnsserver",
-		Shell("cat /etc/resolv.conf | grep nameserver"),
-	)
-  pkg.AddCommands("ipaddress",
-		Shell("ifconfig | grep addr:"),
-	)
-	pkg.AddCommands("bridge",
-  	Shell("if [ -f /sbin/brctl ] ; then brctl show; else echo 'brctl not installed'; fi"),
-		)
   pkg.AddCommands("os",
   	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
 		)
