@@ -38,8 +38,8 @@ func (tpl *DebianMegamCommonInstall) Render(p urknall.Package) {
 func (tpl *DebianMegamCommonInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianMegamCommonInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianMegamCommonInstall{})
+func (tpl *DebianMegamCommonInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianMegamCommonInstall{},inputs)
 }
 
 type DebianMegamCommonInstallTemplate struct{}

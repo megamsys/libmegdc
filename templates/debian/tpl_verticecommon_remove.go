@@ -38,8 +38,8 @@ func (tpl *DebianMegamCommonRemove) Render(p urknall.Package) {
 func (tpl *DebianMegamCommonRemove) Options(t *templates.Template) {
 }
 
-func (tpl *DebianMegamCommonRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianMegamCommonRemove{})
+func (tpl *DebianMegamCommonRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianMegamCommonRemove{},inputs)
 }
 
 type DebianMegamCommonRemoveTemplate struct{}

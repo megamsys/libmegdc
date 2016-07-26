@@ -38,8 +38,8 @@ func (tpl *DebianNilavuRemove) Render(p urknall.Package) {
 func (tpl *DebianNilavuRemove) Options(t *templates.Template) {
 }
 
-func (tpl *DebianNilavuRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianNilavuRemove{})
+func (tpl *DebianNilavuRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianNilavuRemove{},inputs)
 }
 
 type DebianNilavuRemoveTemplate struct{}

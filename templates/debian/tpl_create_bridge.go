@@ -101,7 +101,7 @@ func (tpl *DebianCreateBridge) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateBridge) Run(target urknall.Target) error {
+func (tpl *DebianCreateBridge) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCreateBridge{
 		bridgename:     tpl.bridgename,
     phydev:     tpl.phydev,
@@ -110,7 +110,7 @@ func (tpl *DebianCreateBridge) Run(target urknall.Target) error {
 		gateway:   tpl.gateway,
 		dnsname1:    tpl.dnsname1,
 		dnsname2:     tpl.dnsname2,
-	})
+	},inputs)
 }
 
 type DebianCreateBridgeTemplate struct {

@@ -37,8 +37,8 @@ func (tpl *UbuntuGatewayInstall) Render(p urknall.Package) {
 func (tpl *UbuntuGatewayInstall) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuGatewayInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuGatewayInstall{})
+func (tpl *UbuntuGatewayInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuGatewayInstall{},inputs)
 }
 
 type UbuntuGatewayInstallTemplate struct{}

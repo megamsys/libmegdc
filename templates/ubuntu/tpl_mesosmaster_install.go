@@ -132,11 +132,11 @@ func (tpl *UbuntuMesosMasterInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuMesosMasterInstall) Run(target urknall.Target) error {
+func (tpl *UbuntuMesosMasterInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuMesosMasterInstall{
 		sparkvrs: tpl.sparkvrs,
 
-	})
+	},inputs)
 }
 
 type UbuntuMesosMasterInstallTemplate struct {

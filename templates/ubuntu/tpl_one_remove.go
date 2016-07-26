@@ -37,8 +37,8 @@ func (tpl *UbuntuOneRemove) Render(p urknall.Package) {
 func (tpl *UbuntuOneRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuOneRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuOneRemove{})
+func (tpl *UbuntuOneRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuOneRemove{},inputs)
 }
 
 type UbuntuOneRemoveTemplate struct{}

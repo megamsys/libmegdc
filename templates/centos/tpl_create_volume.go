@@ -48,10 +48,10 @@ func (tpl *CentosCreateVolume) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateVolume) Run(target urknall.Target) error {
+func (tpl *CentosCreateVolume) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosCreateVolume{
 		disk:     tpl.disk,
-	})
+	},inputs)
 }
 
 type CentosCreateVolumeTemplate struct {

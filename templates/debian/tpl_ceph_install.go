@@ -85,13 +85,13 @@ func (tpl *DebianCephInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *DebianCephInstall) Run(target urknall.Target) error {
+func (tpl *DebianCephInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCephInstall{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
 		phydev:    tpl.phydev,
 
-	})
+	},inputs)
 }
 
 type DebianCephInstallTemplate struct {

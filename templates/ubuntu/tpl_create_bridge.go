@@ -100,7 +100,7 @@ func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuCreateBridge) Run(target urknall.Target) error {
+func (tpl *UbuntuCreateBridge) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuCreateBridge{
 		bridgename:     tpl.bridgename,
     phydev:     tpl.phydev,
@@ -109,7 +109,7 @@ func (tpl *UbuntuCreateBridge) Run(target urknall.Target) error {
 		gateway:   tpl.gateway,
 		dnsname1:    tpl.dnsname1,
 		dnsname2: tpl.dnsname2,
-	})
+	},inputs)
 }
 
 type UbuntuCreateBridgeTemplate struct {

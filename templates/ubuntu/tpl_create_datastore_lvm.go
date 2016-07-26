@@ -73,12 +73,12 @@ func (tpl *UbuntuCreateDatastoreLvm) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuCreateDatastoreLvm) Run(target urknall.Target) error {
+func (tpl *UbuntuCreateDatastoreLvm) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuCreateDatastoreLvm{
 		poolname:     tpl.poolname,
     vgname:     tpl.vgname,
     hostname:    tpl.hostname,
-	})
+	},inputs)
 }
 
 type UbuntuCreateDatastoreLvmTemplate struct {

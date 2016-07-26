@@ -89,9 +89,8 @@ func (tpl *CentosCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentosCephGateway) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosCephGateway{
-	})
+func (tpl *CentosCephGateway) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosCephGateway{},inputs)
 }
 
 type CentosCephGatewayTemplate struct {

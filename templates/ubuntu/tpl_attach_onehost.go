@@ -69,13 +69,13 @@ func (tpl *UbuntuAttachOneHost) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuAttachOneHost) Run(target urknall.Target) error {
+func (tpl *UbuntuAttachOneHost) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuAttachOneHost{
 		infodriver:     tpl.infodriver,
     vm:     tpl.vm,
     hostname:    tpl.hostname,
     network:   tpl.network,
-	})
+	},inputs)
 }
 
 type UbuntuAttachOneHostTemplate struct {

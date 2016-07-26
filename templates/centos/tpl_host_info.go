@@ -39,8 +39,8 @@ func (tpl *CentosHostInfo) Render(p urknall.Package) {
 func (tpl *CentosHostInfo) Options(t *templates.Template) {
 }
 
-func (tpl *CentosHostInfo) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosHostInfo{})
+func (tpl *CentosHostInfo) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosHostInfo{},inputs)
 }
 
 type CentosHostInfoTemplate struct{}

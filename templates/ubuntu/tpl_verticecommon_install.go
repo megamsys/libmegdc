@@ -38,8 +38,8 @@ func (tpl *UbuntuMegamCommonInstall) Render(p urknall.Package) {
 func (tpl *UbuntuMegamCommonInstall) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuMegamCommonInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuMegamCommonInstall{})
+func (tpl *UbuntuMegamCommonInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuMegamCommonInstall{},inputs)
 }
 
 type UbuntuMegamCommonInstallTemplate struct{}

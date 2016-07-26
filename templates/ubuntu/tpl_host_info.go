@@ -31,26 +31,23 @@ func init() {
 type UbuntuHostInfo struct{}
 
 func (tpl *UbuntuHostInfo) Render(p urknall.Package) {
-	p.AddTemplate("hostinfo", &UbuntuHostInfoTemplate{})
+	p.AddTemplate("hostinfos", &UbuntuHostInfoTemplate{})
 }
 
 func (tpl *UbuntuHostInfo) Options(t *templates.Template) {}
 
-func (tpl *UbuntuHostInfo) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuHostInfo{})
+func (tpl *UbuntuHostInfo) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuHostInfo{},inputs)
 }
 
 type UbuntuHostInfoTemplate struct{}
 
 func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
 
-	pkg.AddCommands("disk",
-		Shell("df -h | grep \"/dev/sd\""),
-	)
   pkg.AddCommands("memory",
     Shell("free -m"),
   )
-  pkg.AddCommands("blockdevices",
+  pkg.AddCommands("disk",
 		Shell("lsblk | grep sd"),
 	)
   pkg.AddCommands("cpu",
@@ -63,6 +60,3 @@ func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
   	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
 		)
 }
-
-
-

@@ -37,8 +37,8 @@ func (tpl *UbuntuMegamdRemove) Render(p urknall.Package) {
 func (tpl *UbuntuMegamdRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuMegamdRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuMegamdRemove{})
+func (tpl *UbuntuMegamdRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuMegamdRemove{},inputs)
 }
 
 type UbuntuMegamdRemoveTemplate struct{}

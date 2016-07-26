@@ -46,10 +46,10 @@ func (tpl *DebianCephRemove) Render(p urknall.Package) {
 })
 }
 
-func (tpl *DebianCephRemove) Run(target urknall.Target) error {
+func (tpl *DebianCephRemove) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCephRemove{
 		cephuser: tpl.cephuser,
-	})
+	},inputs)
 }
 
 type DebianCephRemoveTemplate struct {

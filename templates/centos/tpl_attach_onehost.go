@@ -69,13 +69,13 @@ func (tpl *CentosAttachOneHost) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosAttachOneHost) Run(target urknall.Target) error {
+func (tpl *CentosAttachOneHost) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosAttachOneHost{
 		infodriver:     tpl.infodriver,
     vm:     tpl.vm,
     hostname:    tpl.hostname,
     network:   tpl.network,
-	})
+	},inputs)
 }
 
 type CentosAttachOneHostTemplate struct {

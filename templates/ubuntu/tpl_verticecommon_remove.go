@@ -37,8 +37,8 @@ func (tpl *UbuntuMegamCommonRemove) Render(p urknall.Package) {
 func (tpl *UbuntuMegamCommonRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuMegamCommonRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuMegamCommonRemove{})
+func (tpl *UbuntuMegamCommonRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuMegamCommonRemove{},inputs)
 }
 
 type UbuntuMegamCommonRemoveTemplate struct{}

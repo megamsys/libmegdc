@@ -73,12 +73,12 @@ func (tpl *CentosCreateDatastoreLvm) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateDatastoreLvm) Run(target urknall.Target) error {
+func (tpl *CentosCreateDatastoreLvm) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosCreateDatastoreLvm{
 		poolname:     tpl.poolname,
     vgname:     tpl.vgname,
     hostname:    tpl.hostname,
-	})
+	},inputs)
 }
 
 type CentosCreateDatastoreLvmTemplate struct {

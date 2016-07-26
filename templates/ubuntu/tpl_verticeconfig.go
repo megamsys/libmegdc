@@ -41,8 +41,8 @@ func (tpl *UbuntuVerticeConfig) Render(p urknall.Package) {
 func (tpl *UbuntuVerticeConfig) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuVerticeConfig) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuVerticeConfig{})
+func (tpl *UbuntuVerticeConfig) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuVerticeConfig{},inputs)
 }
 
 type UbuntuVerticeConfigTemplate struct{

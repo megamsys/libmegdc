@@ -45,10 +45,10 @@ func (tpl *CentosCephRemove) Render(p urknall.Package) {
 })
 }
 
-func (tpl *CentosCephRemove) Run(target urknall.Target) error {
+func (tpl *CentosCephRemove) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosCephRemove{
 		cephuser: tpl.cephuser,
-	})
+	},inputs)
 }
 
 type CentosCephRemoveTemplate struct {

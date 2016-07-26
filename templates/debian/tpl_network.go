@@ -101,7 +101,7 @@ func (tpl *DebianCreateNetworkOpennebula) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateNetworkOpennebula) Run(target urknall.Target) error {
+func (tpl *DebianCreateNetworkOpennebula) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCreateNetworkOpennebula{
 		bridge:     tpl.bridge,
     iptype:     tpl.iptype,
@@ -111,7 +111,7 @@ func (tpl *DebianCreateNetworkOpennebula) Run(target urknall.Target) error {
 		gateway:   tpl.gateway,
 		dns1:    tpl.dns1,
     dns2:   tpl.dns2,
-	})
+	},inputs)
 }
 
 type DebianCreateNetworkOpennebulaTemplate struct {

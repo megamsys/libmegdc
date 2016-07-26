@@ -38,8 +38,8 @@ func (tpl *CentosOneHostRemove) Render(p urknall.Package) {
 func (tpl *CentosOneHostRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosOneHostRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosOneHostRemove{})
+func (tpl *CentosOneHostRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosOneHostRemove{},inputs)
 }
 
 type CentosOneHostRemoveTemplate struct{}

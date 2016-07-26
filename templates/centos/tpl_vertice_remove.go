@@ -37,8 +37,8 @@ func (tpl *CentosMegamdRemove) Render(p urknall.Package) {
 func (tpl *CentosMegamdRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosMegamdRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosMegamdRemove{})
+func (tpl *CentosMegamdRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosMegamdRemove{},inputs)
 }
 
 type CentosMegamdRemoveTemplate struct{}

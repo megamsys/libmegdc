@@ -43,8 +43,8 @@ func (tpl *DebianVerticeReport) Render(p urknall.Package) {
 func (tpl *DebianVerticeReport) Options(t *templates.Template) {
 }
 
-func (tpl *DebianVerticeReport) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianVerticeReport{})
+func (tpl *DebianVerticeReport) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianVerticeReport{},inputs)
 }
 
 type DebianVerticeReportTemplate struct{}

@@ -51,8 +51,8 @@ func (tpl *CentosNilavuInstall) Render(p urknall.Package) {
 func (tpl *CentosNilavuInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentosNilavuInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosNilavuInstall{})
+func (tpl *CentosNilavuInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosNilavuInstall{},inputs)
 }
 
 type CentosNilavuInstallTemplate struct{}

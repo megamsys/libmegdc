@@ -89,9 +89,8 @@ func (tpl *DebianCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *DebianCephGateway) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianCephGateway{
-	})
+func (tpl *DebianCephGateway) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianCephGateway{},inputs)
 }
 
 type DebianCephGatewayTemplate struct {

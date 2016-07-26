@@ -55,8 +55,8 @@ func (tpl *CentosCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &CentosCephDatastoreTemplate{})
 }
 
-func (tpl *CentosCephDatastore) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosCephDatastore{})
+func (tpl *CentosCephDatastore) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosCephDatastore{},inputs)
 }
 
 type CentosCephDatastoreTemplate struct {}

@@ -53,8 +53,8 @@ func (tpl *UbuntuCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{})
 }
 
-func (tpl *UbuntuCephDatastore) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuCephDatastore{})
+func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuCephDatastore{},inputs)
 }
 
 type UbuntuCephDatastoreTemplate struct {}

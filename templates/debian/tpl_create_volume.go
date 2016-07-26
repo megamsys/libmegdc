@@ -49,10 +49,10 @@ func (tpl *DebianCreateVolume) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateVolume) Run(target urknall.Target) error {
+func (tpl *DebianCreateVolume) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCreateVolume{
 		disk:     tpl.disk,
-	})
+	},inputs)
 }
 
 type DebianCreateVolumeTemplate struct {
