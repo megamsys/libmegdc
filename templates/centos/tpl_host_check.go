@@ -39,8 +39,8 @@ func (tpl *CentosHostCheck) Render(p urknall.Package) {
 func (tpl *CentosHostCheck) Options(t *templates.Template) {
 }
 
-func (tpl *CentosHostCheck) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosHostCheck{})
+func (tpl *CentosHostCheck) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosHostCheck{},inputs)
 }
 
 type CentosHostCheckTemplate struct{}

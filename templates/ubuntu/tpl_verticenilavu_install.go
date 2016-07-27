@@ -44,8 +44,8 @@ func (tpl *UbuntuNilavuInstall) Render(p urknall.Package) {
 func (tpl *UbuntuNilavuInstall) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuNilavuInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuNilavuInstall{})
+func (tpl *UbuntuNilavuInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuNilavuInstall{},inputs)
 }
 
 type UbuntuNilavuInstallTemplate struct{}

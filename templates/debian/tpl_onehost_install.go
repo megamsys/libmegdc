@@ -42,8 +42,8 @@ func (tpl *DebianOneHostInstall) Render(p urknall.Package) {
 func (tpl *DebianOneHostInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianOneHostInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianOneHostInstall{})
+func (tpl *DebianOneHostInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianOneHostInstall{},inputs)
 }
 
 type DebianOneHostInstallTemplate struct{}

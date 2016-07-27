@@ -46,8 +46,8 @@ func (tpl *DebianNilavuInstall) Render(p urknall.Package) {
 func (tpl *DebianNilavuInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianNilavuInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianNilavuInstall{})
+func (tpl *DebianNilavuInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianNilavuInstall{},inputs)
 }
 
 type DebianNilavuInstallTemplate struct{}

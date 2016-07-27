@@ -37,8 +37,8 @@ func (tpl *CentosGatewayInstall) Render(p urknall.Package) {
 func (tpl *CentosGatewayInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentosGatewayInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosGatewayInstall{})
+func (tpl *CentosGatewayInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosGatewayInstall{},inputs)
 }
 
 type CentosGatewayInstallTemplate struct{}

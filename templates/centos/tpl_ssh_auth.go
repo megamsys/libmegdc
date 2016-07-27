@@ -56,10 +56,10 @@ if hs, ok := t.Options["HOST"]; ok {
 }
 
 
-func (tpl *CentosSshPass) Run(target urknall.Target) error {
+func (tpl *CentosSshPass) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosSshPass{
 		Host: tpl.Host,
-	})
+	},inputs)
 }
 
 type CentosSshPassTemplate struct{

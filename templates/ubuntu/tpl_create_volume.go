@@ -49,10 +49,10 @@ func (tpl *UbuntuCreateVolume) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuCreateVolume) Run(target urknall.Target) error {
+func (tpl *UbuntuCreateVolume) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuCreateVolume{
 		disk:     tpl.disk,
-	})
+	},inputs)
 }
 
 type UbuntuCreateVolumeTemplate struct {

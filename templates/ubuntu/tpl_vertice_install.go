@@ -37,8 +37,8 @@ func (tpl *UbuntuMegamdInstall) Render(p urknall.Package) {
 func (tpl *UbuntuMegamdInstall) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuMegamdInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuMegamdInstall{})
+func (tpl *UbuntuMegamdInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuMegamdInstall{},inputs)
 }
 
 type UbuntuMegamdInstallTemplate struct{}

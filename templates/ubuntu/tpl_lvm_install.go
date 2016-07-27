@@ -70,14 +70,14 @@ func (tpl *UbuntuLvmInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuLvmInstall) Run(target urknall.Target) error {
+func (tpl *UbuntuLvmInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuLvmInstall{
 		osds:     tpl.osds,
 		bridge: tpl.bridge,
 		phydev:    tpl.phydev,
 		vgname: tpl.vgname,
 
-	})
+	},inputs)
 }
 
 type UbuntuLvmInstallTemplate struct {

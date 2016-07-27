@@ -74,12 +74,12 @@ func (tpl *DebianCreateDatastoreLvm) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateDatastoreLvm) Run(target urknall.Target) error {
+func (tpl *DebianCreateDatastoreLvm) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianCreateDatastoreLvm{
 		poolname:     tpl.poolname,
     vgname:     tpl.vgname,
     hostname:    tpl.hostname,
-	})
+	},inputs)
 }
 
 type DebianCreateDatastoreLvmTemplate struct {

@@ -36,8 +36,8 @@ func (tpl *UbuntuHostCheck) Render(p urknall.Package) {
 
 func (tpl *UbuntuHostCheck) Options(t *templates.Template) {}
 
-func (tpl *UbuntuHostCheck) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuHostCheck{})
+func (tpl *UbuntuHostCheck) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuHostCheck{},inputs)
 }
 
 type UbuntuHostCheckTemplate struct{}

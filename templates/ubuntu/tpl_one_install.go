@@ -40,8 +40,8 @@ func (tpl *UbuntuOneInstall) Render(p urknall.Package) {
 
 func (tpl *UbuntuOneInstall) Options(t *templates.Template) {}
 
-func (tpl *UbuntuOneInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuOneInstall{})
+func (tpl *UbuntuOneInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuOneInstall{},inputs)
 }
 
 type UbuntuOneInstallTemplate struct{}

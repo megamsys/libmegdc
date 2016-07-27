@@ -38,8 +38,8 @@ func (tpl *DebianSnowflakeInstall) Render(p urknall.Package) {
 func (tpl *DebianSnowflakeInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianSnowflakeInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianSnowflakeInstall{})
+func (tpl *DebianSnowflakeInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianSnowflakeInstall{},inputs)
 }
 
 type DebianSnowflakeInstallTemplate struct{}

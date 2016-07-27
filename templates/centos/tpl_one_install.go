@@ -46,8 +46,8 @@ func (tpl *CentosOneInstall) Render(p urknall.Package) {
 
 func (tpl *CentosOneInstall) Options(t *templates.Template) {}
 
-func (tpl *CentosOneInstall) Run(target urknall.Target) error {
-	return urknall.Run(target, &CentosOneInstall{})
+func (tpl *CentosOneInstall) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &CentosOneInstall{},inputs)
 }
 
 type CentosOneInstallTemplate struct{}

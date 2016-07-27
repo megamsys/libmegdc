@@ -38,8 +38,8 @@ func (tpl *DebianMegamdRemove) Render(p urknall.Package) {
 func (tpl *DebianMegamdRemove) Options(t *templates.Template) {
 }
 
-func (tpl *DebianMegamdRemove) Run(target urknall.Target) error {
-	return urknall.Run(target, &DebianMegamdRemove{})
+func (tpl *DebianMegamdRemove) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &DebianMegamdRemove{},inputs)
 }
 
 type DebianMegamdRemoveTemplate struct{}

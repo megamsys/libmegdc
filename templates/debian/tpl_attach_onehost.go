@@ -70,13 +70,13 @@ func (tpl *DebianAttachOneHost) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianAttachOneHost) Run(target urknall.Target) error {
+func (tpl *DebianAttachOneHost) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianAttachOneHost{
 		infodriver:     tpl.infodriver,
     vm:     tpl.vm,
     hostname:    tpl.hostname,
     network:   tpl.network,
-	})
+	},inputs)
 }
 
 type DebianAttachOneHostTemplate struct {

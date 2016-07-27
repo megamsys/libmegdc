@@ -56,10 +56,10 @@ if hs, ok := t.Options["HOST"]; ok {
 }
 
 
-func (tpl *DebianSshPass) Run(target urknall.Target) error {
+func (tpl *DebianSshPass) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &DebianSshPass{
 		Host: tpl.Host,
-	})
+	},inputs)
 }
 
 type DebianSshPassTemplate struct{

@@ -88,14 +88,13 @@ func (tpl *CentosCreateBridge) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateBridge) Run(target urknall.Target) error {
+func (tpl *CentosCreateBridge) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosCreateBridge{
 		bridgename:     tpl.bridgename,
     phydev:     tpl.phydev,
 		netmask:   tpl.netmask,
 		gateway:   tpl.gateway,
-
-	})
+	},inputs)
 }
 
 type CentosCreateBridgeTemplate struct {

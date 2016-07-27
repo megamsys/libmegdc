@@ -88,9 +88,8 @@ func (tpl *UbuntuCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephGateway) Run(target urknall.Target) error {
-	return urknall.Run(target, &UbuntuCephGateway{
-	})
+func (tpl *UbuntuCephGateway) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuCephGateway{},inputs)
 }
 
 type UbuntuCephGatewayTemplate struct {

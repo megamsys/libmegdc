@@ -84,13 +84,13 @@ func (tpl *UbuntuCephInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephInstall) Run(target urknall.Target) error {
+func (tpl *UbuntuCephInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuCephInstall{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
 		phydev:    tpl.phydev,
 
-	})
+	},inputs)
 }
 
 type UbuntuCephInstallTemplate struct {

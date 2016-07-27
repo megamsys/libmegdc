@@ -34,7 +34,7 @@ var runnables map[string]TemplateRunnable
 
 type TemplateRunnable interface {
 	Options(t *Template)
-	Run(target urknall.Target) error
+	Run(target urknall.Target,inputs []string) error
 }
 
 type Template struct {
@@ -50,7 +50,7 @@ func NewTemplate() *Template {
 	return &Template{}
 }
 
-func (t *Template) Run(w io.Writer) error {
+func (t *Template) Run(w io.Writer,inputs []string) error {
 	defer urknall.OpenLogger(w).Close()
 	var target urknall.Target
 	var err error
@@ -78,7 +78,7 @@ func (t *Template) Run(w io.Writer) error {
 
 	if initializeRunner, ok := runner.(TemplateRunnable); ok {
 		initializeRunner.Options(t)
-		return initializeRunner.Run(target)
+		return initializeRunner.Run(target,inputs)
 	}
 	return errors.New(fmt.Sprintf("fatal error, couldn't locate the package %q", t.Name))
 }

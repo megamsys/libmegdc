@@ -55,11 +55,11 @@ func (tpl *CentosCreateNetwork) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentosCreateNetwork) Run(target urknall.Target) error {
+func (tpl *CentosCreateNetwork) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &CentosCreateNetwork{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,
-	})
+	},inputs)
 }
 
 type CentosCreateNetworkTemplate struct {

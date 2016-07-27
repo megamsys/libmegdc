@@ -55,10 +55,10 @@ if hs, ok := t.Options["HOST"]; ok {
 }
 
 
-func (tpl *UbuntuSshPass) Run(target urknall.Target) error {
+func (tpl *UbuntuSshPass) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuSshPass{
 		Host: tpl.Host,
-	})
+	},inputs)
 }
 
 type UbuntuSshPassTemplate struct{
@@ -73,6 +73,6 @@ func (m *UbuntuSshPassTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("SSHPass",
 		WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_rsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
-    
+
 	)
 }
