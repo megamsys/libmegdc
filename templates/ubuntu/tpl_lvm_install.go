@@ -16,7 +16,6 @@
 
 package ubuntu
 
-/*
 import (
 	"os"
 	"fmt"
@@ -26,9 +25,7 @@ import (
 )
 
 const (
-	Bridge = "Bridge"
 	Hdd     = "Osd"
-	Phy    = "PhyDev"
 	VgName  = "VgName"
 )
 
@@ -41,20 +38,12 @@ func init() {
 
 type UbuntuLvmInstall struct {
 	osds      []string
-	bridge string
-	phydev    string
 	vgname string
 }
 
 func (tpl *UbuntuLvmInstall) Options(t *templates.Template) {
 	if osds, ok := t.Maps[Hdd]; ok {
 		tpl.osds = osds
-	}
-	if bridge, ok := t.Options[Bridge]; ok {
-		tpl.bridge = bridge
-	}
-	if phydev, ok := t.Options[Phy]; ok {
-		tpl.phydev = phydev
 	}
 	if vgname, ok := t.Options[VgName]; ok {
 		tpl.vgname = vgname
@@ -64,8 +53,6 @@ func (tpl *UbuntuLvmInstall) Options(t *templates.Template) {
 func (tpl *UbuntuLvmInstall) Render(p urknall.Package) {
 	p.AddTemplate("lvm", &UbuntuLvmInstallTemplate{
 		osds:     tpl.osds,
-		bridge: tpl.bridge,
-	  vgname: tpl.vgname,
 		phydev:    tpl.phydev,
 	})
 }
@@ -73,8 +60,6 @@ func (tpl *UbuntuLvmInstall) Render(p urknall.Package) {
 func (tpl *UbuntuLvmInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuLvmInstall{
 		osds:     tpl.osds,
-		bridge: tpl.bridge,
-		phydev:    tpl.phydev,
 		vgname: tpl.vgname,
 
 	},inputs)
@@ -82,29 +67,18 @@ func (tpl *UbuntuLvmInstall) Run(target urknall.Target,inputs []string) error {
 
 type UbuntuLvmInstallTemplate struct {
   osds     []string
-	bridge string
 	vgname string
-	phydev    string
 }
 
 func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
-	host,_ := os.Hostname()
-	phy := m.phydev
-	ip := IP(phy)
   osddir := ArraytoString("/dev/","",m.osds)
-	bridge := m.bridge
 	vg := m.vgname
-  fmt.Println("bridge  ",bridge )
  pkg.AddCommands("lvminstall",
 	  UpdatePackagesOmitError(),
-		InstallPackages("clvm lvm2 kvm libvirt-bin ruby nfs-common bridge-utils"),
+		InstallPackages("clvm lvm2 kvm"),
 	)
 	pkg.AddCommands("vg-setup",
-		Shell("ip addr flush dev "+phy+""),
-		Shell("brctl addbr "+ bridge),
-		Shell("brctl addif "+ bridge+" "+phy+""),
 		Shell("pvcreate "+osddir+""),
 		Shell("vgcreate "+vg+" "+osddir+""),
 	)
 }
-*/
