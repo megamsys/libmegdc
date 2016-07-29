@@ -16,20 +16,18 @@
 
 package ubuntu
 
-/*
+
 import (
-	"os"
-	"fmt"
+	//"os"
+	//"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 	//"github.com/megamsys/libgo/cmd"
 )
 
 const (
-	Bridge = "Bridge"
 	Hdd     = "Osd"
 	Phy    = "PhyDev"
-	VgName  = "VgName"
 )
 
 var ubuntulvminstall *UbuntuLvmInstall
@@ -88,23 +86,18 @@ type UbuntuLvmInstallTemplate struct {
 }
 
 func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
-	host,_ := os.Hostname()
-	phy := m.phydev
-	ip := IP(phy)
+	//host,_ := os.Hostname()
+//	phy := m.phydev
+	//ip := IP(phy)
   osddir := ArraytoString("/dev/","",m.osds)
-	bridge := m.bridge
+//	bridge := m.bridge
 	vg := m.vgname
-  fmt.Println("bridge  ",bridge )
- pkg.AddCommands("lvminstall",
+    pkg.AddCommands("lvminstall",
 	  UpdatePackagesOmitError(),
-		InstallPackages("clvm lvm2 kvm libvirt-bin ruby nfs-common bridge-utils"),
+		InstallPackages("clvm lvm2 kvm libvirt-bin ruby nfs-common"),
 	)
 	pkg.AddCommands("vg-setup",
-		Shell("ip addr flush dev "+phy+""),
-		Shell("brctl addbr "+ bridge),
-		Shell("brctl addif "+ bridge+" "+phy+""),
 		Shell("pvcreate "+osddir+""),
 		Shell("vgcreate "+vg+" "+osddir+""),
 	)
 }
-*/

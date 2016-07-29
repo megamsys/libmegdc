@@ -70,12 +70,13 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	}
 
 	runner, err := get(t.Name)
+	fmt.Println("**********************",t)
 
 	if err != nil {
 		log.Errorf("fatal error, couldn't locate the package %s", t.Name)
 		return err
 	}
-
+  inputs = []string{"email=ram123@megam.io"}
 	if initializeRunner, ok := runner.(TemplateRunnable); ok {
 		initializeRunner.Options(t)
 		return initializeRunner.Run(target,inputs)

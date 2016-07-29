@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net"
 	"strings"
+	"bufio"
+  "os"
 )
 
 // Upgrade the package cache and update the installed packages (using apt).
@@ -122,4 +124,20 @@ func ArraytoString(prefix,suffix string,value []string) string {
      str = str + " " + prefix + i + suffix
 	}
 	return str
+}
+
+// writeLines writes the lines to the given file.
+func writeScripts(lines []string, path string) error {
+  file, err := os.Create(path)
+  if err != nil {
+    return err
+  }
+  defer file.Close()
+
+  w := bufio.NewWriter(file)
+	fmt.Fprintln(w, "#!/bin/bash")
+  for _, line := range lines {
+    fmt.Fprintln(w, line)
+  }
+  return w.Flush()
 }

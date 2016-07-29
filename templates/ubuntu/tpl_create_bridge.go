@@ -24,14 +24,14 @@ import (
 )
 
 const (
-	Bridgename     = "Bridgename"
-  PhyDev    = "PhyDev"
-	Network   = "Network"
-	Netmask  = "Netmask"
-	Gateway   = "Gateway"
-  Dnsname1  = "Dnsname1"
-	Dnsname2  = "Dnsname2"
- Interface = `auto lo
+	Bridgename = "Bridgename"
+	PhyDev     = "PhyDev"
+	Network    = "Network"
+	Netmask    = "Netmask"
+	Gateway    = "Gateway"
+	Dnsname1   = "Dnsname1"
+	Dnsname2   = "Dnsname2"
+	Interface  = `auto lo
 iface lo inet loopback
 
 auto eth0
@@ -44,7 +44,7 @@ iface %s inet static
 bridge_ports %s
 dns-nameservers %s %s
 source /etc/network/interfaces.d/*.cfg`
-	)
+)
 
 var ubuntucreatebridge *UbuntuCreateBridge
 
@@ -54,20 +54,20 @@ func init() {
 }
 
 type UbuntuCreateBridge struct {
-	bridgename      string
-  phydev       string
-	network      string
-	netmask      string
-	gateway      string
-	dnsname1     string
-	dnsname2     string
-	}
+	bridgename string
+	phydev     string
+	network    string
+	netmask    string
+	gateway    string
+	dnsname1   string
+	dnsname2   string
+}
 
 func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 	if bridgename, ok := t.Options[Bridgename]; ok {
 		tpl.bridgename = bridgename
 	}
-  if phydev, ok := t.Options[PhyDev]; ok {
+	if phydev, ok := t.Options[PhyDev]; ok {
 		tpl.phydev = phydev
 	}
 	if network, ok := t.Options[Network]; ok {
@@ -90,58 +90,58 @@ func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 
 func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
 	p.AddTemplate("bridge", &UbuntuCreateBridgeTemplate{
-		bridgename:     tpl.bridgename,
-    phydev:    tpl.phydev,
-		network:   tpl.network,
-		netmask:   tpl.netmask,
-		gateway:   tpl.gateway,
-		dnsname1: tpl.dnsname1,
-		dnsname2: tpl.dnsname2,
-		})
+		bridgename: tpl.bridgename,
+		phydev:     tpl.phydev,
+		network:    tpl.network,
+		netmask:    tpl.netmask,
+		gateway:    tpl.gateway,
+		dnsname1:   tpl.dnsname1,
+		dnsname2:   tpl.dnsname2,
+	})
 }
 
-func (tpl *UbuntuCreateBridge) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCreateBridge) Run(target urknall.Target, inputs []string) error {
 	return urknall.Run(target, &UbuntuCreateBridge{
-		bridgename:     tpl.bridgename,
-    phydev:     tpl.phydev,
-		network:   tpl.network,
-		netmask:   tpl.netmask,
-		gateway:   tpl.gateway,
-		dnsname1:    tpl.dnsname1,
-		dnsname2: tpl.dnsname2,
-	},inputs)
+		bridgename: tpl.bridgename,
+		phydev:     tpl.phydev,
+		network:    tpl.network,
+		netmask:    tpl.netmask,
+		gateway:    tpl.gateway,
+		dnsname1:   tpl.dnsname1,
+		dnsname2:   tpl.dnsname2,
+	}, inputs)
 }
 
 type UbuntuCreateBridgeTemplate struct {
-  bridgename     string
-  phydev    string
-	network   string
-	netmask string
-	gateway string
-	dnsname1  string
-	dnsname2 string
+	bridgename string
+	phydev     string
+	network    string
+	netmask    string
+	gateway    string
+	dnsname1   string
+	dnsname2   string
 }
 
 func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	ip := IP("")
 	bridgename := m.bridgename
-  phydev := m.phydev
+	phydev := m.phydev
 	network := m.network
 	netmask := m.netmask
 	gateway := m.gateway
 	dnsname1 := m.dnsname1
 	dnsname2 := m.dnsname2
 	pkg.AddCommands("bridgeutils",
-		 Shell("apt-get install -y bridge-utils"),
-		 )
+		Shell("apt-get install -y bridge-utils"),
+	)
 	pkg.AddCommands("interfaces",
-  WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
+		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
-	Shell("brctl addbr "+bridgename+""),
- )
+		Shell("brctl addbr "+bridgename+""),
+	)
 	pkg.AddCommands("list-bridge",
-   Shell("brctl show"),
+		Shell("brctl show"),
 	)
 
 }
