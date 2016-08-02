@@ -1,5 +1,5 @@
 package ubuntu
-/*
+
 import (
 	"github.com/megamsys/urknall"
 	"github.com/megamsys/libmegdc/templates"
@@ -27,7 +27,7 @@ func (tpl *UbuntuRunCustomScripts) Render(p urknall.Package) {
 }
 
 func (tpl *UbuntuRunCustomScripts) Options(t *templates.Template) {
-  if scripts, ok := t.Options[Scripts]; ok {
+  if scripts, ok := t.Maps[Scripts]; ok {
     tpl.scripts = scripts
   }
 }
@@ -43,7 +43,7 @@ type UbuntuRunCustomScriptsTemplate struct{
 }
 
 func (m *UbuntuRunCustomScriptsTemplate) Render(pkg urknall.Package) {
-  path := "/var/lib/urknall/runscripts.shell-scripts/runscripts.sh"
+  path := "/var/lib/urknall/runscripts.sh"
   writeScripts(m.scripts,path)
   pkg.AddCommands("shell-scripts",
     Shell("chmod 755 " + path),
@@ -51,4 +51,3 @@ func (m *UbuntuRunCustomScriptsTemplate) Render(pkg urknall.Package) {
   )
 
 }
-*/

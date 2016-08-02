@@ -75,7 +75,6 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 		log.Errorf("fatal error, couldn't locate the package %s", t.Name)
 		return err
 	}
-	
 	if initializeRunner, ok := runner.(TemplateRunnable); ok {
 		initializeRunner.Options(t)
 		return initializeRunner.Run(target,inputs)
