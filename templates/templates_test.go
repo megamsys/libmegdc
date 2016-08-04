@@ -21,8 +21,6 @@ import (
 	//"fmt"
 	"gopkg.in/check.v1"
   "testing"
-	//log "github.com/Sirupsen/logrus"
-	//"github.com/megamsys/urknall"
 )
 type S struct{}
 
@@ -35,7 +33,7 @@ c.Assert(b, check.NotNil )
 }
 
 func (s *S) TestRunTemplate(c *check.C) {
-  a := Template{Name: "example", Host: "192.168.1.243", UserName: "root", Password: "xxx"}
+  a := Template{Name: "parselvms", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
   c.Assert(a, check.NotNil)
 
   d :=a.Run()

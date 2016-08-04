@@ -16,6 +16,7 @@
 package ubuntu
 
 import (
+	"os"
 	"github.com/megamsys/urknall"
 	"github.com/megamsys/libmegdc/templates"
 )
@@ -48,9 +49,13 @@ func (m *UbuntuHostCheckTemplate) Render(pkg urknall.Package) {
 		Shell("apt-get update -y"),
 	)
   pkg.AddCommands("cpu-checker",
-    Shell("apt-get install -y cpu-checker"),
+    Shell("apt-get install -y qemu-system-x86 qemu-kvm cpu-checker"),
   )
-  pkg.AddCommands("kvm-ok",
-		Shell("kvm-ok"),
-	)
+
+	if _, err := os.Stat("/dev/kvm"); err != nil {
+		 pkg.AddCommands("kvm-ok",
+		 	Shell("kvm-ok  | grep \"KVM acceleration can be used\""),
+		 )
+	}
+
 }
