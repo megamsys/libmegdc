@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2015] [Megam Systems]
+** Copyright [2013-2016] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package templates
 
 import (
 
-	//"fmt"
+	"fmt"
 	"gopkg.in/check.v1"
   "testing"
 )
@@ -33,9 +33,15 @@ c.Assert(b, check.NotNil )
 }
 
 func (s *S) TestRunTemplate(c *check.C) {
-  a := Template{Name: "parselvms", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
+  a := Template{Name: "UbuntuHostInfos", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
   c.Assert(a, check.NotNil)
 
-  d :=a.Run()
+	err := RunInTemplates(&[]Template{a}, func(t *Template, _ chan *Template) error {
+		err := t.Run(w,[]string{"email=vijay@megam.io"})
+		if err != nil {
+			return err
+		}
+		return nil
+	}, nil, false)
   c.Assert(d, check.NotNil)
 }
