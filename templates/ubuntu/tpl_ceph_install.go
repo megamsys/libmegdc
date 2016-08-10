@@ -148,7 +148,6 @@ func (m *UbuntuCephInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("write_cephconf",
 		AsUser(CephUser, Shell("mkdir "+CephHome+"/ceph-cluster")),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host+" ")),
 	  	AsUser(CephUser, Shell("echo 'osd crush chooseleaf type = 0' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 			AsUser(CephUser,Shell("echo 'osd_pool_default_size = 2' >> "+CephHome+"/ceph-cluster/ceph.conf")),

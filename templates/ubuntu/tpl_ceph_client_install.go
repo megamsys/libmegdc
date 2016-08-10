@@ -32,8 +32,8 @@ func (m *UbuntuCephClientInstallTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("update",
     Shell("apt-get update"),
   )
-  // pkg.AddCommands("ceph-common",
-	// 	Shell("apt-get install ceph-common"),
-	// )
+  pkg.AddCommands("ceph-common",
+		Shell("apt-get install ceph-common"),
+	)
 
 }

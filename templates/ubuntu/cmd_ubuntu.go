@@ -80,6 +80,40 @@ func EnsureRunning(service string) *ShellCommand {
 	return Shell(fmt.Sprintf("status %s | grep running || start %s", service, service))
 }
 
+
+// FindIps returns the non loopback local IP4 (can be public or private)
+// if an iface contains a string "pub", then we consider it a public interface
+func findIps() string {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return ""
+	}
+	for _, iface := range ifaces {
+		ifaddress, err := iface.Addrs()
+		if err != nil {
+			return ""
+		}
+		for _, address := range ifaddress {
+			if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && !ipnet.IP.IsMulticast() {
+				if ip4 := ipnet.IP.To4(); ip4 != nil {
+					if ip4[0] == 192  {
+					return ipnet.IP.String()
+					}
+
+					// if ip4[0] == 192 || ip4[0] == 10 || ip4[0] == 172 {
+					// 	priipv4s = append(priipv4s, ipnet.IP.String())
+					// } else {
+					// 	pubipv4s = append(pubipv4s, ipnet.IP.String())
+					// }
+				}
+			}
+		}
+	}
+	return ""
+}
+
+
+
 // IPString returns the non loopback local IP of the host
 func IPNet(Netif string) *net.IPNet {
 	var ipnet_ptr *net.IPNet

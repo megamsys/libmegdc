@@ -86,11 +86,7 @@ type UbuntuLvmInstallTemplate struct {
 }
 
 func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
-	//host,_ := os.Hostname()
-//	phy := m.phydev
-	//ip := IP(phy)
   osddir := ArraytoString("/dev/","",m.osds)
-//	bridge := m.bridge
 	vg := m.vgname
     pkg.AddCommands("lvminstall",
 	  UpdatePackagesOmitError(),
