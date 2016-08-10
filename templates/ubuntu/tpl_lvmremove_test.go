@@ -14,31 +14,29 @@
 ** limitations under the License.
  */
 
-package templates
+package ubuntu
 /*
 import (
-
-"gopkg.in/check.v1"
-"testing"
-"io"
 "fmt"
+"github.com/megamsys/libmegdc/templates"
+"gopkg.in/check.v1"
+"io"
 )
-type S struct{}
-
 var _ = check.Suite(&S{})
+var ubuntulvmremove *UbuntuLvmRemove
 
-func Test(t *testing.T) { check.TestingT(t) }
-func (s *S) TestNewTemplate(c *check.C) {
-  b :=NewTemplate()
-c.Assert(b, check.NotNil )
-}
-
-func (s *S) TestZapTemplate(c *check.C) {
-  a := Template{Name: "FormatPartition", Host: "192.168.0.103", UserName: "rajthilak", Password: "team4megam"}
+func (s *S) TestLvmRemoveTemplate(c *check.C) {
+  ubuntulvmremove = &UbuntuLvmRemove{}
+  c.Assert(ubuntulvmremove, check.NotNil)
+  templates.Register("UbuntuLvmRemove", ubuntulvmremove)
+  a := templates.Template{Name: "UbuntuLvmRemove", Host: "192.168.1.103", UserName: "rajthilak", Password: "team4megam"}
 	m := make(map[string]string)
-	m["Mount"] = "/one"
-  m["partitions"] = "sdb"
-  a.Options = m
+  x := make(map[string][]string)
+  x["LvName"] = append(x["LvName"], "")
+  m["VgName"] = ""
+  m["PvName"] = ""
+  a.Maps = x
+	a.Options = m
   c.Assert(a, check.NotNil)
  	abc := []string{"rajeshr@megam.io"}
 	var t io.Writer
