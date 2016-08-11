@@ -84,28 +84,28 @@ func EnsureRunning(service string) *ShellCommand {
 func IPNet(Netif string) *net.IPNet {
 	var ipnet_ptr *net.IPNet
 	//addrs, err := net.InterfaceAddrs()
-	interfaces, err :=  net.Interfaces()
+	interfaces, err := net.Interfaces()
 	if err != nil {
 		return nil
 	}
 
-  for _,inter := range interfaces {
-		if addrs,err := inter.Addrs(); err == nil {
-			for _,addr := range addrs {
+	for _, inter := range interfaces {
+		if addrs, err := inter.Addrs(); err == nil {
+			for _, addr := range addrs {
 				if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 					if Netif != "" {
 						if ipnet.IP.To4() != nil && inter.Name == Netif {
-					    ipnet_ptr = ipnet
-				    }
+							ipnet_ptr = ipnet
+						}
 					} else {
 						if ipnet.IP.To4() != nil {
-					    ipnet_ptr = ipnet
-			  	  }
+							ipnet_ptr = ipnet
+						}
 					}
-			 }
-		 }
-	 }
- }
+				}
+			}
+		}
+	}
 	return ipnet_ptr
 }
 
@@ -118,10 +118,10 @@ func IP(netif string) string {
 	return ""
 }
 
-func ArraytoString(prefix,suffix string,value []string) string {
+func ArraytoString(prefix, suffix string, value []string) string {
 	str := ""
-	for _,i := range value {
-     str = str + " " + prefix + i + suffix
+	for _, i := range value {
+		str = str + prefix + i + suffix
 	}
 	return str
 }

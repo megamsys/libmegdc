@@ -19,7 +19,6 @@ package templates
 import (
 	"errors"
 	"fmt"
-//	"os"
 	"strings"
 	"sync"
 	"io"
@@ -56,8 +55,6 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	var err error
 	if t.Password != "" {
 		target, err = urknall.NewSshTargetWithPassword(t.UserName+"@"+t.Host, t.Password)
-
-
 	} else {
 		if len(strings.TrimSpace(t.Host)) <= 0 || t.Host == LOCALHOST {
 			target, err = urknall.NewLocalTarget()
@@ -68,7 +65,6 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	if err != nil {
 		return err
 	}
-
 	runner, err := get(t.Name)
 
 	if err != nil {
@@ -79,6 +75,7 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 		initializeRunner.Options(t)
 		return initializeRunner.Run(target,inputs)
 	}
+
 	return errors.New(fmt.Sprintf("fatal error, couldn't locate the package %q", t.Name))
 }
 
