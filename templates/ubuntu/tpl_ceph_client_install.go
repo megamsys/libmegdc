@@ -30,10 +30,10 @@ type UbuntuCephClientInstallTemplate struct{}
 func (m *UbuntuCephClientInstallTemplate) Render(pkg urknall.Package) {
 
   pkg.AddCommands("update",
-    Shell("apt-get update"),
+    Shell("apt-get update -y"),
   )
   pkg.AddCommands("ceph-common",
-		Shell("apt-get install ceph-common"),
+		InstallPackages("ceph-common"),
 	)
 
 }

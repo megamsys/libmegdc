@@ -19,7 +19,6 @@ package templates
 import (
 	"errors"
 	"fmt"
-//	"os"
 	"strings"
 	"sync"
 	"io"
@@ -28,7 +27,10 @@ import (
 	"github.com/megamsys/urknall"
 )
 
-const LOCALHOST = "localhost"
+const (
+	LOCALHOST = "localhost"
+	PRIVATEKEY = "PrivateKey"
+)
 
 var runnables map[string]TemplateRunnable
 
@@ -54,10 +56,18 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	defer urknall.OpenLogger(w).Close()
 	var target urknall.Target
 	var err error
+	var pri_key string
+	if key, ok := t.Options[PRIVATEKEY]; ok {
+      pri_key = key
+	}
+
+	delete(t.Options,PRIVATEKEY)
+
 	if t.Password != "" {
 		target, err = urknall.NewSshTargetWithPassword(t.UserName+"@"+t.Host, t.Password)
-
-
+	} else if pri_key != "" {
+		fmt.Println("*****************PrivateKeyssh*******")
+      target,err = urknall.NewSshTargetWithPrivateKey(t.UserName+"@"+t.Host,[]byte(pri_key))
 	} else {
 		if len(strings.TrimSpace(t.Host)) <= 0 || t.Host == LOCALHOST {
 			target, err = urknall.NewLocalTarget()
@@ -69,6 +79,7 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 		return err
 	}
 
+	fmt.Println("************template******",t)
 	runner, err := get(t.Name)
 
 	if err != nil {
@@ -79,6 +90,7 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 		initializeRunner.Options(t)
 		return initializeRunner.Run(target,inputs)
 	}
+
 	return errors.New(fmt.Sprintf("fatal error, couldn't locate the package %q", t.Name))
 }
 

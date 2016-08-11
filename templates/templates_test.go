@@ -35,7 +35,7 @@ c.Assert(b, check.NotNil )
 func (s *S) TestRunTemplate(c *check.C) {
   a := Template{Name: "UbuntuHostInfos", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
   c.Assert(a, check.NotNil)
-
+	var w io.Writer
 	err := RunInTemplates(&[]Template{a}, func(t *Template, _ chan *Template) error {
 		err := t.Run(w,[]string{"email=vijay@megam.io"})
 		if err != nil {
@@ -44,5 +44,6 @@ func (s *S) TestRunTemplate(c *check.C) {
 		return nil
 	}, nil, false)
   c.Assert(d, check.NotNil)
+
 }
 */

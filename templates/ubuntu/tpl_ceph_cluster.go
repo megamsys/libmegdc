@@ -14,6 +14,7 @@ const (
   CEPHPASSWORD = "CephPassword"
   CLUSTERID = "ClusterId"
   OSDs       = "Osds"
+  HOST       = "Host"
   CLIENTHOST = "ClientHostName"
   CLIENTIP = "ClientIP"
   CLIENTUSER = "ClientUser"
@@ -28,35 +29,51 @@ func init() {
 
 type UbuntuCephClusterInstall struct {
 	cephuser string
+  host string
+  hostname string
 }
 
 func (tpl *UbuntuCephClusterInstall) Options(t *templates.Template) {
-	if cephuser, ok := t.Options[CephUser]; ok {
+	if cephuser, ok := t.Options[CEPHUSER]; ok {
 		tpl.cephuser = cephuser
 	}
+  if host, ok := t.Options[HOST]; ok {
+    tpl.host = host
+  }
+  if hostname, ok := t.Options[CLIENTHOST]; ok {
+    tpl.hostname = hostname
+  }
 }
 
 func (tpl *UbuntuCephClusterInstall) Render(p urknall.Package) {
 	p.AddTemplate("cephcluster", &UbuntuCephClusterInstallTemplate{
 		cephuser: tpl.cephuser,
-		cephhome: UserHomePrefix + tpl.cephuser,
+    host: tpl.host,
+    hostname: tpl.hostname,
 	})
 }
 
 func (tpl *UbuntuCephClusterInstall) Run(target urknall.Target, inputs []string) error {
-	return urknall.Run(target, &UbuntuCephClusterInstall{}, inputs)
+	return urknall.Run(target, tpl, inputs)
 }
 
 type UbuntuCephClusterInstallTemplate struct {
 	cephuser string
-	cephhome string
+  host string
+  hostname string
 }
 
 func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
-	host, _ := os.Hostname()
-	ip := findIps()
+	var CephHome string
+  ip := m.host
+  host := m.hostname
 	CephUser := m.cephuser
-	CephHome := m.cephhome
+  if m.cephuser == "root" {
+    CephHome = "/root"
+  } else {
+    CephHome = UserHomePrefix + m.cephuser
+  }
+
 
 	pkg.AddCommands("install-depends",
 		InstallPackages("apt-transport-https  sudo openssh-server ntp sshpass"),
@@ -96,7 +113,7 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("new-cluster",
 		AsUser(CephUser, Shell("mkdir "+CephHome+"/ceph-cluster")),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host+" ")),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host)),
 	)
 	pkg.AddCommands("write_cephconf",
 		AsUser(CephUser, Shell("echo 'osd_pool_default_size = 2' >> "+CephHome+"/ceph-cluster/ceph.conf")),
@@ -107,6 +124,6 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 		AsUser(CephUser, Shell("echo 'rbd default features = 1' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 	)
 	pkg.AddCommands("mon-init",
-		AsUser(CephUser, Shell("ceph-deploy mon create-initial")),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy mon create-initial")),
 	)
 }

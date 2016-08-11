@@ -5,6 +5,7 @@ import (
 	"net"
 	"strings"
 	"bufio"
+	"path/filepath"
   "os"
 )
 
@@ -81,65 +82,32 @@ func EnsureRunning(service string) *ShellCommand {
 }
 
 
-// FindIps returns the non loopback local IP4 (can be public or private)
-// if an iface contains a string "pub", then we consider it a public interface
-func findIps() string {
-	ifaces, err := net.Interfaces()
-	if err != nil {
-		return ""
-	}
-	for _, iface := range ifaces {
-		ifaddress, err := iface.Addrs()
-		if err != nil {
-			return ""
-		}
-		for _, address := range ifaddress {
-			if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && !ipnet.IP.IsMulticast() {
-				if ip4 := ipnet.IP.To4(); ip4 != nil {
-					if ip4[0] == 192  {
-					return ipnet.IP.String()
-					}
-
-					// if ip4[0] == 192 || ip4[0] == 10 || ip4[0] == 172 {
-					// 	priipv4s = append(priipv4s, ipnet.IP.String())
-					// } else {
-					// 	pubipv4s = append(pubipv4s, ipnet.IP.String())
-					// }
-				}
-			}
-		}
-	}
-	return ""
-}
-
-
-
 // IPString returns the non loopback local IP of the host
 func IPNet(Netif string) *net.IPNet {
 	var ipnet_ptr *net.IPNet
 	//addrs, err := net.InterfaceAddrs()
-	interfaces, err :=  net.Interfaces()
+	interfaces, err := net.Interfaces()
 	if err != nil {
 		return nil
 	}
 
-  for _,inter := range interfaces {
-		if addrs,err := inter.Addrs(); err == nil {
-			for _,addr := range addrs {
+	for _, inter := range interfaces {
+		if addrs, err := inter.Addrs(); err == nil {
+			for _, addr := range addrs {
 				if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 					if Netif != "" {
 						if ipnet.IP.To4() != nil && inter.Name == Netif {
-					    ipnet_ptr = ipnet
-				    }
+							ipnet_ptr = ipnet
+						}
 					} else {
 						if ipnet.IP.To4() != nil {
-					    ipnet_ptr = ipnet
-			  	  }
+							ipnet_ptr = ipnet
+						}
 					}
-			 }
-		 }
-	 }
- }
+				}
+			}
+		}
+	}
 	return ipnet_ptr
 }
 
@@ -152,10 +120,10 @@ func IP(netif string) string {
 	return ""
 }
 
-func ArraytoString(prefix,suffix string,value []string) string {
+func ArraytoString(prefix, suffix string, value []string) string {
 	str := ""
-	for _,i := range value {
-     str = str + " " + prefix + i + suffix
+	for _, i := range value {
+		str = str + " " + prefix + i + suffix
 	}
 	return str
 }
@@ -174,4 +142,24 @@ func writeScripts(lines []string, path string) error {
     fmt.Fprintln(w, line)
   }
   return w.Flush()
+}
+
+//Remove Cached History of commands
+func RemoveAllCaches(dir string) error {
+	d, err := os.Open(dir)
+if err != nil {
+		return err
+}
+defer d.Close()
+names, err := d.Readdirnames(-1)
+if err != nil {
+		return err
+}
+for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+				return err
+		}
+}
+return nil
 }

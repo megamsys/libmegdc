@@ -84,4 +84,5 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
     AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd prepare "+ osds )),
 	)
+	_ = RemoveAllCaches("/var/lib/urknall")
 }

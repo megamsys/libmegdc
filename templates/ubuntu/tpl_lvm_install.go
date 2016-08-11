@@ -16,18 +16,14 @@
 
 package ubuntu
 
-
 import (
-	//"os"
-	//"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	//"github.com/megamsys/libgo/cmd"
 )
 
 const (
-	Hdd     = "Osd"
-	Phy     = "PhyDev"
+	Hdd = "Disks"
+  DefaultVG = "one"
 )
 
 var ubuntulvminstall *UbuntuLvmInstall
@@ -38,21 +34,13 @@ func init() {
 }
 
 type UbuntuLvmInstall struct {
-	osds      []string
-	bridge string
-	phydev    string
+	disks  []string
 	vgname string
 }
 
 func (tpl *UbuntuLvmInstall) Options(t *templates.Template) {
-	if osds, ok := t.Maps[Hdd]; ok {
-		tpl.osds = osds
-	}
-	if bridge, ok := t.Options[Bridge]; ok {
-		tpl.bridge = bridge
-	}
-	if phydev, ok := t.Options[Phy]; ok {
-		tpl.phydev = phydev
+	if disks, ok := t.Maps[Hdd]; ok {
+		tpl.disks = disks
 	}
 	if vgname, ok := t.Options[VgName]; ok {
 		tpl.vgname = vgname
@@ -61,39 +49,38 @@ func (tpl *UbuntuLvmInstall) Options(t *templates.Template) {
 
 func (tpl *UbuntuLvmInstall) Render(p urknall.Package) {
 	p.AddTemplate("lvm", &UbuntuLvmInstallTemplate{
-		osds:     tpl.osds,
-		bridge: tpl.bridge,
-	  vgname: tpl.vgname,
-		phydev:    tpl.phydev,
+		disks:  tpl.disks,
+		vgname: tpl.vgname,
 	})
 }
 
-func (tpl *UbuntuLvmInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuLvmInstall) Run(target urknall.Target, inputs []string) error {
 	return urknall.Run(target, &UbuntuLvmInstall{
-		osds:     tpl.osds,
-		bridge: tpl.bridge,
-		phydev:    tpl.phydev,
+		disks:  tpl.disks,
 		vgname: tpl.vgname,
-
-	},inputs)
+	}, inputs)
 }
 
 type UbuntuLvmInstallTemplate struct {
-  osds     []string
-	bridge string
+	disks  []string
 	vgname string
-	phydev    string
 }
 
 func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
-  osddir := ArraytoString("/dev/","",m.osds)
-	vg := m.vgname
-    pkg.AddCommands("lvminstall",
-	  UpdatePackagesOmitError(),
-		InstallPackages("clvm lvm2 kvm libvirt-bin ruby nfs-common"),
+  var vg string
+	diskdir := ArraytoString("/dev/", "", m.disks)
+	if m.vgname != "" {
+		vg = m.vgname
+	} else {
+		vg = DefaultVG
+	}
+
+	pkg.AddCommands("lvminstall",
+		UpdatePackagesOmitError(),
+		InstallPackages("clvm lvm2 kvm"),
 	)
 	pkg.AddCommands("vg-setup",
-		Shell("pvcreate "+osddir+""),
-		Shell("vgcreate "+vg+" "+osddir+""),
+		Shell("pvcreate "+diskdir),
+		Shell("vgcreate "+vg+" "+diskdir),
 	)
 }

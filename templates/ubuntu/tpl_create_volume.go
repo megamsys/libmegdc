@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	Disk     = "Disk"
+	Disks     = "Disks"
 	)
 
 var ubuntucreatevolume *UbuntuCreateVolume
@@ -38,7 +38,7 @@ type UbuntuCreateVolume struct {
 	}
 
 func (tpl *UbuntuCreateVolume) Options(t *templates.Template) {
-	if disk, ok := t.Options[Disk]; ok {
+	if disk, ok := t.Options[Disks]; ok {
 		tpl.disk = disk
 	}
 }
