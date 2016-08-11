@@ -14,27 +14,29 @@
 ** limitations under the License.
  */
 
-package templates
-
+package ubuntu
 /*
 import (
-
-	//"fmt"
-	"gopkg.in/check.v1"
-  "testing"
+"fmt"
+"github.com/megamsys/libmegdc/templates"
+"gopkg.in/check.v1"
+"io"
 )
-type S struct{}
-
 var _ = check.Suite(&S{})
+var ubuntulvmremove *UbuntuLvmRemove
 
-func Test(t *testing.T) { check.TestingT(t) }
-func (s *S) TestNewTemplate(c *check.C) {
-  b :=NewTemplate()
-c.Assert(b, check.NotNil )
-}
-
-func (s *S) TestRunTemplate(c *check.C) {
-  a := Template{Name: "parselvms", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
+func (s *S) TestLvmRemoveTemplate(c *check.C) {
+  ubuntulvmremove = &UbuntuLvmRemove{}
+  c.Assert(ubuntulvmremove, check.NotNil)
+  templates.Register("UbuntuLvmRemove", ubuntulvmremove)
+  a := templates.Template{Name: "UbuntuLvmRemove", Host: "192.168.1.103", UserName: "rajthilak", Password: "team4megam"}
+	m := make(map[string]string)
+  x := make(map[string][]string)
+  x["LvName"] = append(x["LvName"], "")
+  m["VgName"] = ""
+  m["PvName"] = ""
+  a.Maps = x
+	a.Options = m
   c.Assert(a, check.NotNil)
  	abc := []string{"rajeshr@megam.io"}
 	var t io.Writer

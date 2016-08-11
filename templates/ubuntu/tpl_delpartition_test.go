@@ -14,32 +14,31 @@
 ** limitations under the License.
  */
 
-package templates
-
+package ubuntu
 /*
 import (
-
-	//"fmt"
-	"gopkg.in/check.v1"
-  "testing"
+"fmt"
+"github.com/megamsys/libmegdc/templates"
+"gopkg.in/check.v1"
+"io"
 )
-type S struct{}
-
 var _ = check.Suite(&S{})
+var ubuntuformatpartitions *UbuntuFormatPartition
 
-func Test(t *testing.T) { check.TestingT(t) }
-func (s *S) TestNewTemplate(c *check.C) {
-  b :=NewTemplate()
-c.Assert(b, check.NotNil )
-}
-
-func (s *S) TestRunTemplate(c *check.C) {
-  a := Template{Name: "parselvms", Host: "192.168.0.117", UserName: "megdc", Password: "megdc"}
+func (s *S) TestDelPartitionsTemplate(c *check.C) {
+  fmt.Println("-----------")
+  ubuntuformatpartitions = &UbuntuFormatPartition{}
+  c.Assert(ubuntuformatpartitions, check.NotNil)
+  templates.Register("UbuntuFormatPartition", ubuntuformatpartition)
+  a := templates.Template{Name: "UbuntuFormatPartition", Host: "192.168.1.103", UserName: "rajthilak", Password: "team4megam"}
+	m := make(map[string]string)
+  m["Mount"] = ""
+  m["Partitions"] = ""
+	a.Options = m
   c.Assert(a, check.NotNil)
  	abc := []string{"rajeshr@megam.io"}
 	var t io.Writer
   d :=a.Run(t, abc)
 	fmt.Println(d)
   c.Assert(nil, check.NotNil)
-}
-*/
+}*/
