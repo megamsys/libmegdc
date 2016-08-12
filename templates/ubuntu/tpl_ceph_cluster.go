@@ -1,7 +1,6 @@
 package ubuntu
 
 import (
-  "os"
   "fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
@@ -19,6 +18,7 @@ const (
   CLIENTIP = "ClientIP"
   CLIENTUSER = "ClientUser"
   CLIENTPASSWORD = "ClientPassword"
+  CLIENTKEY  = "ClientPrivatKey"
 )
 
 
@@ -97,14 +97,12 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("etchost",
 		Shell("echo '"+ip+" "+host+"' >> /etc/hosts"),
 	)
-
-	if _, err := os.Stat(CephHome + "/.ssh/id_rsa"); err != nil {
+//checking have to add if key exist
 		pkg.AddCommands("ssh-keygen",
 			Mkdir(CephHome+"/.ssh", CephUser, 0700),
 			AsUser(CephUser, Shell("ssh-keygen -N '' -t rsa -f "+CephHome+"/.ssh/id_rsa")),
-			AsUser(CephUser, Shell("cp "+CephHome+"/.ssh/id_rsa.pub "+CephHome+"/.ssh/authorized_keys")),
+			AsUser(CephUser, Shell("cat "+CephHome+"/.ssh/id_rsa.pub >>"+CephHome+"/.ssh/authorized_keys")),
 		)
-	}
 
 	pkg.AddCommands("ssh_known_hosts",
 		WriteFile(CephHome+"/.ssh/ssh_config", StrictHostKey, CephUser, 0755),

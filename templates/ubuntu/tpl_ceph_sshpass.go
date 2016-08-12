@@ -33,7 +33,8 @@ type UbuntuEnableCephAccess struct {
 	clientuser     string
 	clienthostname string
 	clientip       string
-  clientpwd       string
+  clientpwd      string
+	clientkey      string
 }
 
 func (tpl *UbuntuEnableCephAccess) Render(p urknall.Package) {
@@ -42,37 +43,34 @@ func (tpl *UbuntuEnableCephAccess) Render(p urknall.Package) {
 		clientuser:     tpl.clientuser,
 		clienthostname: tpl.clienthostname,
 		clientip:       tpl.clientip,
-    clientpwd:       tpl.clientpwd,
+    clientpwd:      tpl.clientpwd,
+		clientkey:      tpl.clientkey,
 	})
 }
 
 func (tpl *UbuntuEnableCephAccess) Options(t *templates.Template) {
-	if cephuser, ok := t.Options["CEPHUSER"]; ok {
+	if cephuser, ok := t.Options[CEPHUSER]; ok {
 		tpl.cephuser = cephuser
 	}
-	if clientip, ok := t.Options["CLIENTIP"]; ok {
+	if clientip, ok := t.Options[CLIENTIP]; ok {
 		tpl.clientip = clientip
 	}
-
-	if clientuser, ok := t.Options["CLIENTUSER"]; ok {
+	if clientuser, ok := t.Options[CLIENTUSER]; ok {
 		tpl.clientuser = clientuser
 	}
-	if clienthostname, ok := t.Options["CLIENTHOST"]; ok {
+	if clienthostname, ok := t.Options[CLIENTHOST]; ok {
 		tpl.clienthostname = clienthostname
 	}
-  if clientpwd, ok := t.Options["CLIENTPASSWORD"]; ok {
+  if clientpwd, ok := t.Options[CLIENTPASSWORD]; ok {
     tpl.clientpwd = clientpwd
   }
+	if clientkey, ok := t.Options[CLIENTKEY]; ok {
+		tpl.clientkey = clientkey
+	}
 }
 
 func (tpl *UbuntuEnableCephAccess) Run(target urknall.Target, inputs []string) error {
-	return urknall.Run(target, &UbuntuEnableCephAccess{
-		cephuser:       tpl.cephuser,
-		clientuser:     tpl.clientuser,
-		clienthostname: tpl.clienthostname,
-		clientip:       tpl.clientip,
-    clientpwd:       tpl.clientpwd,
-	}, inputs)
+	return urknall.Run(target, tpl, inputs)
 }
 
 type UbuntuEnableCephAccessTemplate struct {
@@ -81,24 +79,47 @@ type UbuntuEnableCephAccessTemplate struct {
 	clienthostname string
   clientpwd      string
 	clientip       string
+	clientkey      string
 }
 
 func (m *UbuntuEnableCephAccessTemplate) Render(pkg urknall.Package) {
-
+  var CephHome, ClientHome string
 	ClientIP := m.clientip
 	ClientHostName := m.clienthostname
 	ClientUser := m.clientuser
 	CephUser := m.cephuser
-	CephHome :=  UserHomePrefix + m.cephuser
+	if m.cephuser == "root" {
+		CephHome = "/root"
+	} else {
+		CephHome = UserHomePrefix + m.cephuser
+	}
   ClientPassword := m.clientpwd
-  ClientHome := m.clientuser
+	ClientKey := m.clientkey
+	if m.clientuser == "root" {
+		ClientHome = "/root"
+	} else {
+		ClientHome = UserHomePrefix + m.clientuser
+	}
 
-	pkg.AddCommands("install-sshpass",
-		InstallPackages("sshpass"),
-	)
 	pkg.AddCommands("SSHPass",
-		Shell("echo '"+ClientIP+"  "+ClientHostName+"' >> /etc/hosts"),
+		Shell("echo '"+ ClientIP +"  "+ ClientHostName +"' >> /etc/hosts"),
 		WriteFile(CephHome +"/.ssh/config", KnownHostsList, CephUser, 0755),
-		AsUser(CephHome, Shell("sshpass -p " + ClientPassword +" scp -o StrictHostKeyChecking=no " + CephHome + "/.ssh/id_rsa.pub " + ClientUser + "@" + ClientIP + ":" + ClientHome + "/.ssh/authorized_keys")),
 	)
+	//temp fix for VM , if no password means have to change for key access
+
+	if ClientPassword != "" {
+		pkg.AddCommands("install-sshpass",
+			InstallPackages("sshpass"),
+		)
+		pkg.AddCommands("pass-pub-key",
+		AsUser(CephUser,Shell("sshpass -p " + ClientPassword +" scp -o StrictHostKeyChecking=no " + CephHome + "/.ssh/id_rsa.pub " + ClientUser + "@" + ClientIP + ":" + ClientHome + "/.ssh/authorized_keys")),
+		)
+	} else {
+		//using private key
+		pkg.AddCommands("pass-pub-key",
+		WriteFile(CephHome +"/client_key", ClientKey, CephUser, 0600),
+		AsUser(CephUser, Shell(" scp -i "+ CephHome +"/client_key" +" -o StrictHostKeyChecking=no " + CephHome + "/.ssh/id_rsa.pub " + ClientUser + "@" + ClientIP + ":" + ClientHome + "/.ssh/authorized_keys")),
+		)
+	}
+
 }
