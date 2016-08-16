@@ -26,35 +26,22 @@ import (
 const (
 	DelPartitions = `
 #!/bin/bash
-path=%s
 Disk=(%s)
 for i in ${Disk[@]}
 do
-echo sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/$i >> File
+echo "sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/$i" > delpart
 for (( totalPartitions=$(grep -c $i[0-9] /proc/partitions); totalPartitions>0; totalPartitions-- ))
 do
-	echo "d" >> $path2
-	echo $totalPartitions >> $path2
+	echo "d" >> delpart
+	echo $totalPartitions >> delpart
 done
-echo "w"
-EOF
-done
-`
-	ZapFile = `
-#!/bin/bash
-path2=%s
-Disk=(%s)
-input=d
-for i in "{$Disk[@]}"
-do
-for (( totalPartitions=$(grep -c '$i[0-9]' /proc/partitions); totalPartitions>0; totalPartitions-- ))
-do
-	echo $input >> $path2
-	echo $totalPartitions >> $path2
-done
-echo "w"
+echo 'w' >> delpart
+echo 'EOF' >> delpart
+chmod +x delpart
+echo "disk $i zapping unsuccessful" | ./delpart
 done
 `
+
 )
 
 var ubuntudeletepartitions *UbuntuDeletePartitions
@@ -75,7 +62,7 @@ func (tpl *UbuntuDeletePartitions) Options(t *templates.Template) {
 }
 
 func (tpl *UbuntuDeletePartitions) Render(p urknall.Package) {
-	p.AddTemplate("DeletePartitions", &UbuntuDeletePartitionsTemplate{
+	p.AddTemplate("delpart", &UbuntuDeletePartitionsTemplate{
 		disks: tpl.disks,
 	})
 }
@@ -93,15 +80,10 @@ type UbuntuDeletePartitionsTemplate struct {
 func (m *UbuntuDeletePartitionsTemplate) Render(pkg urknall.Package) {
 	Disk := ArraytoString("","",m.disks)
 	path := "/var/lib/urknall/zapscripts.sh"
-	path2 := "/var/lib/urknall/zapfile.sh"
-//	path3 := "/var/lib/urknall/file.sh"
-	pkg.AddCommands("delete-scripts",
+	pkg.AddCommands("write-scripts",
 		WriteFile(path, fmt.Sprintf(DelPartitions, Disk), "root", 0755),
-		WriteFile(path2, fmt.Sprintf(ZapFile, path2, Disk), "root", 0755),
-//	WriteFile(path3, fmt.Sprintf(DelDisk, DelPartitions, ZapFile), "root", 0755),
-	)
+  )
 	pkg.AddCommands("delete-partitions",
-		Shell("cat "+path+""),
-		Shell("cat "+path2+""),
+		Shell("cat "+path),
 	)
 }

@@ -5,6 +5,7 @@ import (
 	"net"
 	"strings"
 	"bufio"
+	"path/filepath"
   "os"
 )
 
@@ -80,6 +81,7 @@ func EnsureRunning(service string) *ShellCommand {
 	return Shell(fmt.Sprintf("status %s | grep running || start %s", service, service))
 }
 
+
 // IPString returns the non loopback local IP of the host
 func IPNet(Netif string) *net.IPNet {
 	var ipnet_ptr *net.IPNet
@@ -121,7 +123,7 @@ func IP(netif string) string {
 func ArraytoString(prefix, suffix string, value []string) string {
 	str := ""
 	for _, i := range value {
-		str = str + prefix + i + suffix
+		str = str + " " + prefix + i + suffix
 	}
 	return str
 }
@@ -140,4 +142,24 @@ func writeScripts(lines []string, path string) error {
     fmt.Fprintln(w, line)
   }
   return w.Flush()
+}
+
+//Remove Cached History of commands
+func RemoveAllCaches(dir string) error {
+	d, err := os.Open(dir)
+if err != nil {
+		return err
+}
+defer d.Close()
+names, err := d.Readdirnames(-1)
+if err != nil {
+		return err
+}
+for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+				return err
+		}
+}
+return nil
 }

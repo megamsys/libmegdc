@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2015] [Megam Systems]
+** Copyright [2013-2016] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -148,7 +148,6 @@ func (m *UbuntuCephInstallTemplate) Render(pkg urknall.Package) {
 
 	pkg.AddCommands("write_cephconf",
 		AsUser(CephUser, Shell("mkdir "+CephHome+"/ceph-cluster")),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host+" ")),
 	  	AsUser(CephUser, Shell("echo 'osd crush chooseleaf type = 0' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 			AsUser(CephUser,Shell("echo 'osd_pool_default_size = 2' >> "+CephHome+"/ceph-cluster/ceph.conf")),

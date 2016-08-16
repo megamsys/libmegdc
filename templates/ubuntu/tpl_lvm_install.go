@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2015] [Megam Systems]
+** Copyright [2013-2016] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import (
 )
 
 const (
-	Hdd = "Disk"
+	Hdd = "Disks"
+  DefaultVG = "one"
 )
 
 var ubuntulvminstall *UbuntuLvmInstall
@@ -66,14 +67,20 @@ type UbuntuLvmInstallTemplate struct {
 }
 
 func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
+  var vg string
 	diskdir := ArraytoString("/dev/", "", m.disks)
-	vg := m.vgname
+	if m.vgname != "" {
+		vg = m.vgname
+	} else {
+		vg = DefaultVG
+	}
+
 	pkg.AddCommands("lvminstall",
 		UpdatePackagesOmitError(),
 		InstallPackages("clvm lvm2 kvm"),
 	)
 	pkg.AddCommands("vg-setup",
-		Shell("pvcreate "+diskdir+""),
-		Shell("vgcreate "+vg+" "+diskdir+""),
+		Shell("pvcreate "+diskdir),
+		Shell("vgcreate "+vg+" "+diskdir),
 	)
 }

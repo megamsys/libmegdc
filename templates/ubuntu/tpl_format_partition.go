@@ -24,59 +24,58 @@ import (
 
 const (
   Mount = "Mount"
-	Partitions = "Partitions"
 )
 
-var ubuntuformatpartition *UbuntuFormatPartition
+var ubuntuformatpartitions *UbuntuFormatPartitions
 
 func init() {
 
-	ubuntuformatpartition = &UbuntuFormatPartition{}
-	templates.Register("UbuntuFormatPartition", ubuntuformatpartition)
+	ubuntuformatpartitions = &UbuntuFormatPartitions{}
+	templates.Register("UbuntuFormatPartitions", ubuntuformatpartitions)
 }
 
-type UbuntuFormatPartition struct{
+type UbuntuFormatPartitions struct{
   mount string
   partitions string
 }
 
-func (tpl *UbuntuFormatPartition) Options(t *templates.Template) {
+func (tpl *UbuntuFormatPartitions) Options(t *templates.Template) {
   if mount, ok := t.Options[Mount]; ok {
 		tpl.mount = mount
 	}
-  if partitions, ok := t.Options[Partitions]; ok {
+  if partitions, ok := t.Options[Disks]; ok {
 		tpl.partitions = partitions
 	}
 }
 
-func (tpl *UbuntuFormatPartition) Render(p urknall.Package) {
-	p.AddTemplate("delete", &UbuntuFormatPartitionTemplate{
+func (tpl *UbuntuFormatPartitions) Render(p urknall.Package) {
+	p.AddTemplate("delete", &UbuntuFormatPartitionsTemplate{
     mount : tpl.mount,
     partitions : tpl.partitions,
 
   })
 }
 
-func (tpl *UbuntuFormatPartition) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuFormatPartition{
+func (tpl *UbuntuFormatPartitions) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, &UbuntuFormatPartitions{
     mount : tpl.mount,
     partitions : tpl.partitions,
     },inputs)
 }
 
-type UbuntuFormatPartitionTemplate struct{
+type UbuntuFormatPartitionsTemplate struct{
   mount string
   partitions string
 
 }
 
-func (m *UbuntuFormatPartitionTemplate) Render(pkg urknall.Package) {
+func (m *UbuntuFormatPartitionsTemplate) Render(pkg urknall.Package) {
 Mount := m.mount
 //Partitions := m.partitions
 ZapDisk := "sda"
 
 pkg.AddCommands("del-partition",
   Shell("umount "+Mount+""),
-  Shell("mkfs.ext4 "+ZapDisk+""),
+  Shell("mkfs.ext4 "+ ZapDisk +""),
   )
 }

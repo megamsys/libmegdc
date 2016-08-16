@@ -75,12 +75,12 @@ type UbuntuLvmRemoveTemplate struct {
 }
 
 func (m *UbuntuLvmRemoveTemplate) Render(pkg urknall.Package) {
-  lvname := ArraytoString(""," ",m.lvname)
+  lvname := ArraytoString("","",m.lvname)
 	vg := m.vgname
   pv := m.pvname
  	pkg.AddCommands("lvm-remove",
-		Shell("lvremove -f "+lvname+""),
-		Shell("vgremove "+vg+""),
-    Shell("pvremove "+pv+""),
+		Shell("lvremove -f " + lvname),
+		Shell("vgremove "+vg),
+    Shell("pvremove "+pv),
 	)
 }

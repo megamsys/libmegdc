@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2015] [Megam Systems]
+** Copyright [2013-2016] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package ubuntu
 import (
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	"github.com/pborman/uuid"
 	"fmt"
 )
 
@@ -45,32 +44,41 @@ func init() {
 	templates.Register("UbuntuCephDatastore", ubuntucephdatastore)
 }
 
-type UbuntuCephDatastore struct {}
+type UbuntuCephDatastore struct {
+		uuid string
+}
 
-func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {}
+func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
+	if uuid, ok := t.Options[CLUSTERID]; ok {
+		tpl.uuid = uuid
+	}
+}
 
 func (tpl *UbuntuCephDatastore) Render(p urknall.Package) {
-	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{})
+	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{
+		uuid: tpl.uuid,
+	})
 }
 
 func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuCephDatastore{},inputs)
+	return urknall.Run(target, &UbuntuCephDatastore{
+		uuid: tpl.uuid,
+		},inputs)
 }
 
-type UbuntuCephDatastoreTemplate struct {}
+type UbuntuCephDatastoreTemplate struct {
+	uuid string
+}
 
 func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
-Uid := uuid.NewUUID()
+    Uid := m.uuid
 		pkg.AddCommands("cephdatastore",
-  	AsUser(Ceph_User,Shell("ceph osd pool create "+Poolname+" 150")),
+  	AsUser(Ceph_User,Shell("ceph osd pool create "+Poolname+" 128")),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+Poolname+"'"),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;cp ceph.client.* /etc/ceph"),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster; "+fmt.Sprintf(Echo,Uid)+" >uid"),
-		Shell("echo '*****************************************' "),
-		Shell(fmt.Sprintf(Echo,Uid)),
-		Shell("echo '*****************************************' "),
 		WriteFile(UserHomePrefix + Ceph_User + "/ceph-cluster" + "/secret.xml",fmt.Sprintf(Xml,Uid),"root",644),
 		InstallPackages("libvirt-bin"),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;sudo virsh secret-define secret.xml"),

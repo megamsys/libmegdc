@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2015] [Megam Systems]
+** Copyright [2013-2016] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -45,14 +45,14 @@ type UbuntuHostCheckTemplate struct{}
 
 func (m *UbuntuHostCheckTemplate) Render(pkg urknall.Package) {
 
-	pkg.AddCommands("update",
+	pkg.AddCommands("updating",
 		Shell("apt-get update -y"),
 	)
   pkg.AddCommands("cpu-checker",
     Shell("apt-get install -y qemu-system-x86 qemu-kvm cpu-checker"),
   )
 
-	if _, err := os.Stat("/dev/kvm"); err != nil {
+	if _, err := os.Stat("/dev/kvm"); err == nil {
 		 pkg.AddCommands("kvm-ok",
 		 	Shell("kvm-ok  | grep \"KVM acceleration can be used\""),
 		 )
