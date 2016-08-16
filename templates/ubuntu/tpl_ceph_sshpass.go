@@ -83,7 +83,6 @@ type UbuntuEnableCephAccessTemplate struct {
 }
 
 func (m *UbuntuEnableCephAccessTemplate) Render(pkg urknall.Package) {
-  var CephHome, ClientHome string
 	ClientIP := m.clientip
 	ClientHostName := m.clienthostname
 	ClientUser := m.clientuser
@@ -118,7 +117,7 @@ func (m *UbuntuEnableCephAccessTemplate) Render(pkg urknall.Package) {
 		//using private key
 		pkg.AddCommands("pass-pub-key",
 		WriteFile(CephHome +"/client_key", ClientKey, CephUser, 0600),
-		AsUser(CephUser, Shell(" scp -i "+ CephHome +"/client_key" +" -o StrictHostKeyChecking=no " + CephHome + "/.ssh/id_rsa.pub " + ClientUser + "@" + ClientIP + ":" + ClientHome + "/.ssh/authorized_keys")),
+		AsUser(CephUser, Shell("ssh -i "+ CephHome +"/client_key" +" -o StrictHostKeyChecking=no " + ClientUser + "@" + ClientIP + " \"cat >>" + ClientHome + "/.ssh/authorized_keys\" <" + CephHome + "/.ssh/id_rsa.pub ")),
 		)
 	}
 

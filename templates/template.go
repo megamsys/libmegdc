@@ -66,7 +66,6 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	if t.Password != "" {
 		target, err = urknall.NewSshTargetWithPassword(t.UserName+"@"+t.Host, t.Password)
 	} else if pri_key != "" {
-		fmt.Println("*****************PrivateKeyssh*******")
       target,err = urknall.NewSshTargetWithPrivateKey(t.UserName+"@"+t.Host,[]byte(pri_key))
 	} else {
 		if len(strings.TrimSpace(t.Host)) <= 0 || t.Host == LOCALHOST {
@@ -79,7 +78,6 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 		return err
 	}
 
-	fmt.Println("************template******",t)
 	runner, err := get(t.Name)
 
 	if err != nil {
