@@ -46,6 +46,7 @@ func (m *UbuntuAddReposTemplate) Render(pkg urknall.Package) {
 
   pkg.AddCommands("addrepos",
     Shell(m.repos),
+		Shell("apt-get update -y"),
   )
 
 }

@@ -70,12 +70,10 @@ type UbuntuFormatPartitionsTemplate struct{
 }
 
 func (m *UbuntuFormatPartitionsTemplate) Render(pkg urknall.Package) {
-Mount := m.mount
-//Partitions := m.partitions
 ZapDisk := "sda"
 
 pkg.AddCommands("del-partition",
-  Shell("umount "+Mount+""),
+  Shell("umount "+ZapDisk+""),
   Shell("mkfs.ext4 "+ ZapDisk +""),
   )
 }

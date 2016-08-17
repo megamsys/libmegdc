@@ -21,6 +21,8 @@ const (
   CLIENTKEY  = "ClientPrivatKey"
 )
 
+var CephHome, ClientHome string
+
 
 func init() {
 	ubuntucephclusterinstall = &UbuntuCephClusterInstall{}
@@ -54,7 +56,11 @@ func (tpl *UbuntuCephClusterInstall) Render(p urknall.Package) {
 }
 
 func (tpl *UbuntuCephClusterInstall) Run(target urknall.Target, inputs []string) error {
-	return urknall.Run(target, tpl, inputs)
+	return urknall.Run(target, &UbuntuCephClusterInstall{
+    cephuser: tpl.cephuser,
+    host: tpl.host,
+    hostname: tpl.hostname,
+    }, inputs)
 }
 
 type UbuntuCephClusterInstallTemplate struct {
@@ -64,7 +70,6 @@ type UbuntuCephClusterInstallTemplate struct {
 }
 
 func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
-	var CephHome string
   ip := m.host
   host := m.hostname
 	CephUser := m.cephuser
@@ -73,7 +78,6 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
   } else {
     CephHome = UserHomePrefix + m.cephuser
   }
-
 
 	pkg.AddCommands("install-depends",
 		InstallPackages("apt-transport-https  sudo openssh-server ntp sshpass"),
