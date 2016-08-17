@@ -19,16 +19,16 @@ package templates
 import (
 	"errors"
 	"fmt"
+	"io"
 	"strings"
 	"sync"
-	"io"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/urknall"
 )
 
 const (
-	LOCALHOST = "localhost"
+	LOCALHOST  = "localhost"
 	PRIVATEKEY = "PrivateKey"
 )
 
@@ -36,7 +36,7 @@ var runnables map[string]TemplateRunnable
 
 type TemplateRunnable interface {
 	Options(t *Template)
-	Run(target urknall.Target,inputs []string) error
+	Run(target urknall.Target, inputs []string) error
 }
 
 type Template struct {
@@ -45,41 +45,39 @@ type Template struct {
 	UserName string
 	Password string
 	Options  map[string]string
-	Maps map[string][]string
+	Maps     map[string][]string
 }
 
 func NewTemplate() *Template {
 	return &Template{}
 }
 
-func (t *Template) Run(w io.Writer,inputs []string) error {
+func (t *Template) Run(w io.Writer, inputs []string) error {
 	defer urknall.OpenLogger(w).Close()
 	var target urknall.Target
 	var err error
 	var pri_key string
+
 	if key, ok := t.Options[PRIVATEKEY]; ok {
-      pri_key = key
+		pri_key = key
 	}
-
-	delete(t.Options,PRIVATEKEY)
-
 	if t.Password != "" {
 		target, err = urknall.NewSshTargetWithPassword(t.UserName+"@"+t.Host, t.Password)
 	} else if pri_key != "" {
 		fmt.Println("*****************PrivateKeyssh*******")
-      target,err = urknall.NewSshTargetWithPrivateKey(t.UserName+"@"+t.Host,[]byte(pri_key))
+		target, err = urknall.NewSshTargetWithPrivateKey(t.UserName+"@"+t.Host, []byte(pri_key))
 	} else {
 		if len(strings.TrimSpace(t.Host)) <= 0 || t.Host == LOCALHOST {
 			target, err = urknall.NewLocalTarget()
 		} else {
-			target, err = urknall.NewSshTarget(t.UserName+"@"+t.Host) //this is with sshkey
+			target, err = urknall.NewSshTarget(t.UserName + "@" + t.Host) //this is with sshkey
 		}
 	}
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("************template******",t)
+	fmt.Println("************template******", t)
 	runner, err := get(t.Name)
 
 	if err != nil {
@@ -88,7 +86,7 @@ func (t *Template) Run(w io.Writer,inputs []string) error {
 	}
 	if initializeRunner, ok := runner.(TemplateRunnable); ok {
 		initializeRunner.Options(t)
-		return initializeRunner.Run(target,inputs)
+		return initializeRunner.Run(target, inputs)
 	}
 
 	return errors.New(fmt.Sprintf("fatal error, couldn't locate the package %q", t.Name))

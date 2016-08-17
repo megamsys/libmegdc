@@ -1,5 +1,5 @@
 /*
-** Copyright [2013-2016] [Megam Systems]
+** Copyright [2013-2015] [Megam Systems]
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ const (
 	Gateway    = "Gateway"
 	Dnsname1   = "Dnsname1"
 	Dnsname2   = "Dnsname2"
+	Host       = "Host"
 	Interface  = `auto lo
 iface lo inet loopback
 
@@ -61,6 +62,7 @@ type UbuntuCreateBridge struct {
 	gateway    string
 	dnsname1   string
 	dnsname2   string
+	host       string
 }
 
 func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
@@ -76,7 +78,6 @@ func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 	if netmask, ok := t.Options[Netmask]; ok {
 		tpl.netmask = netmask
 	}
-
 	if gateway, ok := t.Options[Gateway]; ok {
 		tpl.gateway = gateway
 	}
@@ -85,6 +86,9 @@ func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 	}
 	if dnsname2, ok := t.Options[Dnsname2]; ok {
 		tpl.dnsname2 = dnsname2
+	}
+	if host, ok := t.Options[Host]; ok {
+		tpl.host = host
 	}
 }
 
@@ -97,6 +101,7 @@ func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
 		gateway:    tpl.gateway,
 		dnsname1:   tpl.dnsname1,
 		dnsname2:   tpl.dnsname2,
+		host:       tpl.host,
 	})
 }
 
@@ -109,6 +114,7 @@ func (tpl *UbuntuCreateBridge) Run(target urknall.Target, inputs []string) error
 		gateway:    tpl.gateway,
 		dnsname1:   tpl.dnsname1,
 		dnsname2:   tpl.dnsname2,
+		host:       tpl.host,
 	}, inputs)
 }
 
@@ -120,10 +126,11 @@ type UbuntuCreateBridgeTemplate struct {
 	gateway    string
 	dnsname1   string
 	dnsname2   string
+	host       string
 }
 
 func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
-	ip := IP("")
+	ip := m.host
 	bridgename := m.bridgename
 	phydev := m.phydev
 	network := m.network
@@ -131,10 +138,12 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	gateway := m.gateway
 	dnsname1 := m.dnsname1
 	dnsname2 := m.dnsname2
+
 	pkg.AddCommands("bridgeutils",
 		Shell("apt-get install -y bridge-utils"),
 	)
 	pkg.AddCommands("interfaces",
+		Shell("cp /etc/network/interfaces /etc/network/bkinterfaces"),
 		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
