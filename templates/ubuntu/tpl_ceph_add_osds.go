@@ -51,7 +51,7 @@ func (tpl *UbuntuAddOsds) Options(t *templates.Template) {
 }
 
 func (tpl *UbuntuAddOsds) Render(p urknall.Package) {
-	p.AddTemplate("zap-disk", &UbuntuAddOsdsTemplate{
+	p.AddTemplate("add-osds", &UbuntuAddOsdsTemplate{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
     clienthostname: tpl.clienthostname,
@@ -77,12 +77,25 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
   CephUser := m.cephuser
 	CephHome := UserHomePrefix + CephUser
   ClientHostName := m.clienthostname
+	if m.cephuser == "root" {
+		CephHome = "/root"
+	} else {
+		CephHome = UserHomePrefix + m.cephuser
+	}
+  prepareosds := ArraytoString(ClientHostName+":","",m.osds)
+	hostname := ClientHostName + ":"
+	activeteosds := ""
+	prefix := "/dev/"
+			for _,v := range m.osds {
+							activeteosds =  activeteosds + hostname + prefix + v + "1" +":"+  prefix + v + "2" + " "
+			}
 
-  osds := ArraytoString(ClientHostName+":","",m.osds)
-
-	pkg.AddCommands("add-osds",
+	pkg.AddCommands("prepare-osds",
     AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd prepare "+ osds )),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy --overwrite-conf osd prepare "+ prepareosds )),
 	)
-	_ = RemoveAllCaches("/var/lib/urknall")
+	pkg.AddCommands("activate-osds",
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
+		RemoveAllCaches("/var/lib/urknall/zap-disk.*"),
+	)
 }

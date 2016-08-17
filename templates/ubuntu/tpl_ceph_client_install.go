@@ -33,7 +33,7 @@ func (m *UbuntuCephClientInstallTemplate) Render(pkg urknall.Package) {
     Shell("apt-get update -y"),
   )
   pkg.AddCommands("ceph-common",
-		InstallPackages("ceph-common"),
+		InstallPackages("ceph-common ceph ceph-mds ca-certificates apt-transport-https"),
 	)
 
 }

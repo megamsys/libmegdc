@@ -76,9 +76,12 @@ type UbuntuZapDisksTemplate struct {
 
 func (m *UbuntuZapDisksTemplate) Render(pkg urknall.Package) {
   CephUser := m.cephuser
-	CephHome := UserHomePrefix + CephUser
   ClientHostName := m.clienthostname
-
+	if m.cephuser == "root" {
+		CephHome = "/root"
+	} else {
+		CephHome = UserHomePrefix + m.cephuser
+	}
   osds := ArraytoString(ClientHostName+":","",m.osds)
 
 	pkg.AddCommands("zap-disks",
