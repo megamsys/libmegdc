@@ -13,6 +13,10 @@ func UpdatePackages() *ShellCommand {
 	return And("apt-get update", "DEBIAN_FRONTEND=noninteractive apt-get upgrade -y")
 }
 
+func UpdateApt() *ShellCommand {
+ return &ShellCommand{Command: "apt-get update -y"}
+}
+
 // Upgrade the package cache and update the installed packages (using apt).
 func UpdatePackagesOmitError() *ShellCommand {
 	return Or("apt-get update", "DEBIAN_FRONTEND=noninteractive apt-get upgrade -y")
