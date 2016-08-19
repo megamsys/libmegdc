@@ -51,6 +51,6 @@ func (m *UbuntuHostCheckTemplate) Render(pkg urknall.Package) {
     Shell("apt-get install -y qemu-system-x86 qemu-kvm cpu-checker"),
   )
 	 pkg.AddCommands("kvm-ok",
-		   If("-f /dev/kvm"	,Shell("kvm-ok  | grep \"KVM acceleration can be used\"")),
+		   Shell("if [ -c /dev/kvm ]; then kvm-ok  | grep \"KVM acceleration can be used\"; fi;"),
 	)
 }
