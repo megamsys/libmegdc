@@ -83,7 +83,7 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 		InstallPackages("apt-transport-https  sudo openssh-server ntp sshpass"),
 	)
 	pkg.AddCommands("install-ceph",
-		InstallPackages("ceph-deploy ceph-common ceph-mds dnsmasq ceph"),
+		InstallPackages("ceph-deploy ceph-common ceph-mds ceph"),
 	)
 
 	// pkg.AddCommands("cephuser_add",

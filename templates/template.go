@@ -76,7 +76,6 @@ func (t *Template) Run(w io.Writer, inputs []string) error {
 	if err != nil {
 		return err
 	}
-
 	runner, err := get(t.Name)
 
 	if err != nil {
