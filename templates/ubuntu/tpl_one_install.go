@@ -62,7 +62,7 @@ func (m *UbuntuOneInstallTemplate) Render(pkg urknall.Package) {
 
 	ip := m.hostip
 	pkg.AddCommands("one-install",
-		InstallPackages("opennebula opennebula-sunstone opennebula-gate opennebula-flow"),
+		InstallPackages("opennebula opennebula-sunstone"),
 	)
 
 	pkg.AddCommands("requires",

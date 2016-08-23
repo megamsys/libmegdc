@@ -96,6 +96,6 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("activate-osds",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
-		RemoveAllCaches("/var/lib/urknall/zap-disk.*"),
+		RemoveAllCaches("/var/lib/urknall/add-osds.*"),
 	)
 }
