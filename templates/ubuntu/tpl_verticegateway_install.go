@@ -17,8 +17,14 @@
 package ubuntu
 
 import (
+	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
+)
+
+const (
+	dbConf = `sed -i 's/^[ \t]*scylla.host = "localhost".*/scylla.host = "%s"/' /var/lib/megam/varticegateway/gateway.conf`
+	nsqConf = `sed -i 's/^[ \t]*nsq.url="http:\/\/localhost:4151".*/nsq.url="http:\/\/%s:4151"/' /var/lib/megam/varticegateway/gateway.conf`
 )
 
 var ubuntugatewayinstall *UbuntuGatewayInstall
@@ -28,29 +34,38 @@ func init() {
 	templates.Register("UbuntuGatewayInstall", ubuntugatewayinstall)
 }
 
-type UbuntuGatewayInstall struct{}
+type UbuntuGatewayInstall struct{
+			hostip string
+}
 
 func (tpl *UbuntuGatewayInstall) Render(p urknall.Package) {
-	p.AddTemplate("gateway", &UbuntuGatewayInstallTemplate{})
+	p.AddTemplate("gateway", &UbuntuGatewayInstallTemplate{
+				hostip: tpl.hostip,
+	})
 }
 
 func (tpl *UbuntuGatewayInstall) Options(t *templates.Template) {
+	if host,ok := t.Options[HOST]; ok {
+		tpl.hostip = host
+	}
 }
 
 func (tpl *UbuntuGatewayInstall) Run(target urknall.Target,inputs []string) error {
 	return urknall.Run(target, &UbuntuGatewayInstall{},inputs)
 }
 
-type UbuntuGatewayInstallTemplate struct{}
+type UbuntuGatewayInstallTemplate struct{
+			hostip string
+}
 
 func (m *UbuntuGatewayInstallTemplate) Render(pkg urknall.Package) {
-	//fail on Java -version (1.8 check)
-	pkg.AddCommands("repository",
-		Shell("echo 'deb [arch=amd64] "+DefaultMegamRepo+"' > "+ListFilePath),
-		UpdatePackagesOmitError(),
-	)
 
 	pkg.AddCommands("verticegateway",
 		InstallPackages("verticegateway"),
+	)
+	pkg.AddCommands("conf",
+	Shell(fmt.Sprintf(dbConf, m.hostip)),
+	Shell(fmt.Sprintf(nsqConf, m.hostip)),
+	Shell("sudo restart verticegateway"),
 	)
 }

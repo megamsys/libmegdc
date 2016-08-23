@@ -17,15 +17,13 @@ package ubuntu
 
 
 import (
+	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 )
 
 const (
-	// DefaultMegamRepo is the default megam repository to install if its not provided.
-	DefaultMegamRepo = "http://get.megam.io/1.0/ubuntu/14.04/ trusty testing"
-
-	ListFilePath = "/etc/apt/sources.list.d/megam.list"
+	nilavuConf = `sed -i 's/^[ \t]*bundle exec passenger start -a 127.0.0.1 -p 8080 -d -e production.*/    bundle exec passenger start -a %s -p 8080 -d -e production/' /etc/init/verticenilavu.conf`
 )
 
 var ubuntunilavuinstall *UbuntuNilavuInstall
@@ -35,31 +33,37 @@ func init() {
 	templates.Register("UbuntuNilavuInstall", ubuntunilavuinstall)
 }
 
-type UbuntuNilavuInstall struct{}
+type UbuntuNilavuInstall struct{
+	hostip string
+}
 
 func (tpl *UbuntuNilavuInstall) Render(p urknall.Package) {
-	p.AddTemplate("nilavu", &UbuntuNilavuInstallTemplate{})
+	p.AddTemplate("nilavu", &UbuntuNilavuInstallTemplate{
+		hostip: tpl.hostip,
+	})
 }
 
 func (tpl *UbuntuNilavuInstall) Options(t *templates.Template) {
+	if host,ok := t.Options[HOST]; ok {
+		tpl.hostip = host
+	}
 }
 
 func (tpl *UbuntuNilavuInstall) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuNilavuInstall{},inputs)
+	return urknall.Run(target, tpl,inputs)
 }
 
-type UbuntuNilavuInstallTemplate struct{}
+type UbuntuNilavuInstallTemplate struct{
+		hostip string
+}
 
 func (m *UbuntuNilavuInstallTemplate) Render(pkg urknall.Package) {
-  //fail on ruby2.0 < check
-
-	pkg.AddCommands("repository",
-		Shell("echo 'deb [arch=amd64] "+DefaultMegamRepo+"' > "+ListFilePath),
-		UpdatePackagesOmitError(),
-	)
 
 	pkg.AddCommands("verticenilavu",
 		InstallPackages("verticenilavu"),
 	)
-
+	pkg.AddCommands("conf",
+	Shell(fmt.Sprintf(nilavuConf, m.hostip)),
+	Shell("sudo restart verticenilavu"),
+	)
 }

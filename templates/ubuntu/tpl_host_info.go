@@ -45,4 +45,7 @@ func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("os",
   	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
 		)
+	pkg.AddCommands("kvm-ok",
+				Shell("if [ -c /dev/kvm ]; then echo 'KVM acceleration can be used'; else echo 'KVM acceleration can not be used'; fi;"),
+	)
 }

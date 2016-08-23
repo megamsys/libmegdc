@@ -61,6 +61,7 @@ func (t *Template) Run(w io.Writer, inputs []string) error {
 	if key, ok := t.Options[PRIVATEKEY]; ok {
 		pri_key = key
 	}
+
 	if t.Password != "" {
 		target, err = urknall.NewSshTargetWithPassword(t.UserName+"@"+t.Host, t.Password)
 	} else if pri_key != "" {

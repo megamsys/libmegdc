@@ -45,11 +45,6 @@ func (tpl *UbuntuMegamCommonInstall) Run(target urknall.Target,inputs []string) 
 type UbuntuMegamCommonInstallTemplate struct{}
 
 func (m *UbuntuMegamCommonInstallTemplate) Render(pkg urknall.Package) {
-
-	pkg.AddCommands("repository",
-		Shell("echo 'deb [arch=amd64] " + DefaultMegamRepo + "' > " + ListFilePath),
-		UpdatePackagesOmitError(),
-	)
 	pkg.AddCommands("verticecommon",
 		InstallPackages("verticecommon"),
 
