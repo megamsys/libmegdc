@@ -52,26 +52,35 @@ func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
 	if uuid, ok := t.Options[CLUSTERID]; ok {
 		tpl.uuid = uuid
 	}
+	if cephuser, ok := t.Options[CEPHUSER]; ok {
+		tpl.cephuser = cephuser
+	}
 }
 
 func (tpl *UbuntuCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{
 		uuid: tpl.uuid,
+		cephuser: tpl.cephuser,
 	})
 }
 
 func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuCephDatastore{
-		uuid: tpl.uuid,
-		},inputs)
+	return urknall.Run(target,tpl,inputs)
 }
 
 type UbuntuCephDatastoreTemplate struct {
 	uuid string
+	cephuser string
 }
 
 func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
     Uid := m.uuid
+		Ceph_User = m.cephuser
+
+		if Ceph_User == "root" {
+	    UserHomePrefix = "/"
+	  }
+		
 		pkg.AddCommands("cephdatastore",
   	AsUser(Ceph_User,Shell("ceph osd pool create "+Poolname+" 128")),
 		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+Poolname+"'"),
