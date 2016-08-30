@@ -121,4 +121,7 @@ func (m *UbuntuCreateOneImageTemplate) Render(pkg urknall.Package) {
 			Shell("oneimage create --datastore "+datastoreid+" --name "+name+" --type "+imagetype+" --size "+imagesize+" --path /var/lib/megam/images/"+name+".img"),
 		)
 	}
+	pkg.AddCommands("clearCaches",
+		RemoveAllCaches("/var/lib/urknall/createoneimage.*"),
+	)
 }
