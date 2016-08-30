@@ -46,42 +46,53 @@ func init() {
 
 type UbuntuCephDatastore struct {
 		uuid string
+		cephuser string
 }
 
 func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
 	if uuid, ok := t.Options[CLUSTERID]; ok {
 		tpl.uuid = uuid
 	}
+	if cephuser, ok := t.Options[CEPHUSER]; ok {
+		tpl.cephuser = cephuser
+	}
 }
 
 func (tpl *UbuntuCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{
 		uuid: tpl.uuid,
+		cephuser: tpl.cephuser,
 	})
 }
 
 func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuCephDatastore{
-		uuid: tpl.uuid,
-		},inputs)
+	return urknall.Run(target,tpl,inputs)
 }
 
 type UbuntuCephDatastoreTemplate struct {
 	uuid string
+	cephuser string
 }
 
 func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
+	var UserHome string
     Uid := m.uuid
+		if m.cephuser == "root" {
+	    UserHome = "/" +  m.cephuser
+	  } else {
+			UserHome = UserHomePrefix + m.cephuser
+		}
+
 		pkg.AddCommands("cephdatastore",
-  	AsUser(Ceph_User,Shell("ceph osd pool create "+Poolname+" 128")),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+Poolname+"'"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;cp ceph.client.* /etc/ceph"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster; "+fmt.Sprintf(Echo,Uid)+" >uid"),
-		WriteFile(UserHomePrefix + Ceph_User + "/ceph-cluster" + "/secret.xml",fmt.Sprintf(Xml,Uid),"root",644),
+  	AsUser(CephUser,Shell("ceph osd pool create "+Poolname+" 128")),
+		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+Poolname+"'"),
+		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
+		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),
+		Shell("cd "+UserHome+"/ceph-cluster;cp ceph.client.* /etc/ceph"),
+		Shell("cd "+UserHome+"/ceph-cluster; "+fmt.Sprintf(Echo,Uid)+" >uid"),
+		WriteFile(UserHome + "/ceph-cluster" + "/secret.xml",fmt.Sprintf(Xml,Uid),"root",644),
 		InstallPackages("libvirt-bin"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;sudo virsh secret-define secret.xml"),
-		Shell("cd "+UserHomePrefix + Ceph_User+"/ceph-cluster;"+ fmt.Sprintf(Setval,Uid)),
+		Shell("cd "+UserHome+"/ceph-cluster;sudo virsh secret-define secret.xml"),
+		Shell("cd "+UserHome+"/ceph-cluster;"+ fmt.Sprintf(Setval,Uid)),
 	)
 }
