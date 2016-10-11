@@ -21,14 +21,6 @@ import (
 	"github.com/megamsys/libmegdc/templates"
 )
 
-const (
-	KnownHostsList = `
-	ConnectTimeout 5
-	Host *
-	StrictHostKeyChecking no
-	`
-)
-
 var ubuntusshpass *UbuntuSshPass
 
 func init() {
@@ -49,7 +41,7 @@ func (tpl *UbuntuSshPass) Render(p urknall.Package) {
 
 func (tpl *UbuntuSshPass) Options(t *templates.Template) {
 
-if hs, ok := t.Options["HOST"]; ok {
+if hs, ok := t.Options[HOSTNODE]; ok {
 	tpl.Host = hs
 }
 }
@@ -71,7 +63,6 @@ func (m *UbuntuSshPassTemplate) Render(pkg urknall.Package) {
 	  InstallPackages("sshpass"),
 	)
 	pkg.AddCommands("SSHPass",
-		WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 		AsUser("oneadmin", Shell("sshpass -p 'oneadmin' scp -o StrictHostKeyChecking=no /var/lib/one/.ssh/id_rsa.pub oneadmin@"+ m.Host +":/var/lib/one/.ssh/authorized_keys")),
 
 	)
