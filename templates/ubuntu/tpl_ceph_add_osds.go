@@ -91,11 +91,12 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
 			}
 
 	pkg.AddCommands("prepare-osds",
-    AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
+    //AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy --overwrite-conf osd prepare "+ prepareosds )),
 	)
 	pkg.AddCommands("activate-osds",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy admin "+ ClientHostName )),
 		RemoveAllCaches("/var/lib/urknall/add-osds.*"),
 	)
 }

@@ -19,6 +19,8 @@ const (
   CLIENTUSER = "ClientUser"
   CLIENTPASSWORD = "ClientPassword"
   CLIENTKEY  = "ClientPrivatKey"
+  POOLNAME = "PoolName"
+  DefaultPoolname = "one"
 )
 
 var CephHome, ClientHome string
@@ -33,6 +35,7 @@ type UbuntuCephClusterInstall struct {
 	cephuser string
   host string
   hostname string
+  poolname string
 }
 
 func (tpl *UbuntuCephClusterInstall) Options(t *templates.Template) {
@@ -45,6 +48,9 @@ func (tpl *UbuntuCephClusterInstall) Options(t *templates.Template) {
   if hostname, ok := t.Options[CLIENTHOST]; ok {
     tpl.hostname = hostname
   }
+  if poolname, ok := t.Options[POOLNAME]; ok {
+    tpl.poolname = poolname
+  }
 }
 
 func (tpl *UbuntuCephClusterInstall) Render(p urknall.Package) {
@@ -52,21 +58,19 @@ func (tpl *UbuntuCephClusterInstall) Render(p urknall.Package) {
 		cephuser: tpl.cephuser,
     host: tpl.host,
     hostname: tpl.hostname,
+    poolname: tpl.poolname,
 	})
 }
 
 func (tpl *UbuntuCephClusterInstall) Run(target urknall.Target, inputs []string) error {
-	return urknall.Run(target, &UbuntuCephClusterInstall{
-    cephuser: tpl.cephuser,
-    host: tpl.host,
-    hostname: tpl.hostname,
-    }, inputs)
+	return urknall.Run(target,tpl, inputs)
 }
 
 type UbuntuCephClusterInstallTemplate struct {
 	cephuser string
   host string
   hostname string
+  poolname string
 }
 
 func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
@@ -78,6 +82,11 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
   } else {
     CephHome = UserHomePrefix + m.cephuser
   }
+  if m.poolname != "" {
+    poolname = m.poolname
+  } else {
+    poolname = DefaultPoolname
+  }
 
 	pkg.AddCommands("install-depends",
 		InstallPackages("apt-transport-https  sudo openssh-server ntp sshpass"),
@@ -85,18 +94,6 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("install-ceph",
 		InstallPackages("ceph-deploy ceph-common ceph-mds ceph"),
 	)
-
-	// pkg.AddCommands("cephuser_add",
-	//  AddUser(CephUser,false),
-	// )
-	//
-	// pkg.AddCommands("cephuser_sudoer",
-	//   Shell("echo '"+CephUser+" ALL = (root) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/"+CephUser+""),
-	// )
-	//
-	// pkg.AddCommands("chmod_sudoer",
-	//   Shell("sudo chmod 0440 /etc/sudoers.d/"+CephUser+""),
-	// )
 
 	pkg.AddCommands("etchost",
 		Shell("echo '"+ip+" "+host+"' >> /etc/hosts"),
@@ -127,5 +124,11 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("mon-init",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy mon create-initial")),
+    AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;sudo cp ceph.client.* /etc/ceph/"))
+    Shell("sudo chmod +r /etc/ceph/ceph.client.admin.keyring")
+    Shell("sudo chown -R "+CephUser+":"+CephUser+" /etc/ceph/ceph.client.admin.keyring")
 	)
+  	pkg.AddCommands("create-pool",
+      AsUser(CephUser, Shell("ceph osd pool create "+poolname+" 128")),
+    )
 }
