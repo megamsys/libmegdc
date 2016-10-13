@@ -130,14 +130,23 @@ type UbuntuCreateBridgeTemplate struct {
 }
 
 func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
+	var dnsname2, dnsname1 string
 	ip := m.host
 	bridgename := m.bridgename
 	phydev := m.phydev
 	network := m.network
 	netmask := m.netmask
 	gateway := m.gateway
-	dnsname1 := m.dnsname1
-	dnsname2 := m.dnsname2
+	if m.dnsname1 == "" {
+		dnsname1 = "8.8.8.8"
+	} else {
+		dnsname1 = m.dnsname1
+	}
+	if m.dnsname2 == "" {
+		dnsname2 = "8.8.4.4"
+	} else {
+		dnsname2 = m.dnsname2
+	}
 
 	pkg.AddCommands("bridgeutils",
 		Shell("apt-get install -y bridge-utils"),
