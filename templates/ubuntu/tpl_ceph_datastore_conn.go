@@ -93,7 +93,7 @@ func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
 		}
 
 		pkg.AddCommands("cephdatastore",
-		Shell("mkdir -p "+UserHome+"/ceph-cluster")
+		Shell("mkdir -p "+UserHome+"/ceph-cluster"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+poolname+"'"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),

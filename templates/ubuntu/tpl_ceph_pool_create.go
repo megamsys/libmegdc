@@ -19,7 +19,6 @@ package ubuntu
 import (
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	"fmt"
 )
 
 var ubuntucephpoolcreate *UbuntuCephPoolCreate
@@ -60,14 +59,7 @@ type UbuntuCephPoolCreateTemplate struct {
 }
 
 func (m *UbuntuCephPoolCreateTemplate) Render(pkg urknall.Package) {
-	var UserHome string
-		if m.cephuser == "root" {
-	    UserHome = "/" +  m.cephuser
-	  } else {
-			UserHome = UserHomePrefix + m.cephuser
-		}
-
 		pkg.AddCommands("ceph-pool-create",
-  	AsUser(CephUser,Shell("ceph osd pool create "+m.poolname+" 128")),
+  	AsUser(m.cephuser,Shell("ceph osd pool create "+m.poolname+" 128")),
 	)
 }

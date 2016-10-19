@@ -23,7 +23,7 @@ const (
   DefaultPoolname = "one"
 )
 
-var CephHome, ClientHome string
+var CephHome, ClientHome,poolname string
 
 
 func init() {
@@ -124,9 +124,9 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("mon-init",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy mon create-initial")),
-    AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;sudo cp ceph.client.* /etc/ceph/"))
-    Shell("sudo chmod +r /etc/ceph/ceph.client.admin.keyring")
-    Shell("sudo chown -R "+CephUser+":"+CephUser+" /etc/ceph/ceph.client.admin.keyring")
+    AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;sudo cp ceph.client.* /etc/ceph/")),
+    Shell("sudo chmod +r /etc/ceph/ceph.client.admin.keyring"),
+    Shell("sudo chown -R "+CephUser+":"+CephUser+" /etc/ceph/ceph.client.admin.keyring"),
 	)
   	pkg.AddCommands("create-pool",
       AsUser(CephUser, Shell("ceph osd pool create "+poolname+" 128")),
