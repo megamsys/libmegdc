@@ -47,13 +47,9 @@ func (m *UbuntuSwarmInstallTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("swarminstall",
 		 Shell(" curl -fsSL https://get.docker.com/ | sh"),
 	 )
-	 
-	pkg.AddCommands("Run",
-		Shell("docker run" ),
-	)
 
-	pkg.AddCommands("create ",
-		Shell("--rm swarm create"),
+	pkg.AddCommands("Run",
+		Shell("docker run--rm swarm create" ),
 	)
 
 }
