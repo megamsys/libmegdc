@@ -45,7 +45,7 @@ script
 end script
 post-start script
    PID=$(status dockernodejoin | egrep -oi '([0-9]+)$' | head -n1)
-   echo $PID > /var/run/megam/dockernode.pid
+   echo $PID > /var/run/megam/dockernodejoin.pid
 end script`
 
 )
