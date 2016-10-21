@@ -41,7 +41,7 @@ stop on (stopped dockernodejoin)
 respawn# start the cibd seed
 script
  echo "[$(date -u +%Y-%m-%dT%T.%3NZ)] (sys) dockernodejoin starting" >> /var/log/megam/dockernodejoin.log
- exec  docker run -d swarm join --advertise=%s:2375 token:// %s  >> /var/log/megam/dockernodejoin.log 2>&1
+ exec  docker run -d swarm join --advertise=%s:2375 token://%s>> /var/log/megam/dockernodejoin.log 2>&1
 end script
 post-start script
    PID=$(status dockernodejoin | egrep -oi '([0-9]+)$' | head -n1)
@@ -58,7 +58,7 @@ func init() {
 }
 
 type UbuntuDockerNodeJoinInstall struct {
-nodeip      string
+nodeip   string
 swarmtoken string
 
 }
