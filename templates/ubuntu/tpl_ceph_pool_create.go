@@ -37,7 +37,7 @@ func (tpl *UbuntuCephPoolCreate) Options(t *templates.Template) {
 	if poolname, ok := t.Options[POOLNAME]; ok {
 		tpl.poolname = poolname
 	}
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
 }

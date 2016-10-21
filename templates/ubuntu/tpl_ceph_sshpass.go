@@ -49,7 +49,7 @@ func (tpl *UbuntuEnableCephAccess) Render(p urknall.Package) {
 }
 
 func (tpl *UbuntuEnableCephAccess) Options(t *templates.Template) {
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
 	if clientip, ok := t.Options[CLIENTIP]; ok {

@@ -9,8 +9,7 @@ import (
 var ubuntucephclusterinstall *UbuntuCephClusterInstall
 
 const (
-  CEPHUSER = "CephUser"
-  CEPHPASSWORD = "CephPassword"
+  USERNAME  = "Username"
   CLUSTERID = "ClusterId"
   OSDs       = "Osds"
   HOST       = "Host"
@@ -39,7 +38,7 @@ type UbuntuCephClusterInstall struct {
 }
 
 func (tpl *UbuntuCephClusterInstall) Options(t *templates.Template) {
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
   if host, ok := t.Options[HOST]; ok {
@@ -111,10 +110,11 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 	)
 
 	pkg.AddCommands("new-cluster",
-		AsUser(CephUser, Shell("mkdir "+CephHome+"/ceph-cluster")),
+		AsUser(CephUser, Shell("mkdir -p "+CephHome+"/ceph-cluster")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host)),
 	)
 	pkg.AddCommands("write_cephconf",
+    AsUser(CephUser, Shell("sed -i \"s/^[ ]*mon_host.*/mon_host = "+ip+"/\" "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'osd_pool_default_size = 2' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'osd crush chooseleaf type = 1' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'mon_pg_warn_max_per_osd = 0' >> "+CephHome+"/ceph-cluster/ceph.conf")),

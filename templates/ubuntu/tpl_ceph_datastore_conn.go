@@ -53,7 +53,7 @@ func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
 	if uuid, ok := t.Options[CLUSTERID]; ok {
 		tpl.uuid = uuid
 	}
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
 	if poolname, ok := t.Options[POOLNAME]; ok {

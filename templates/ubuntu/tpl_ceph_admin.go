@@ -38,7 +38,7 @@ type UbuntuCephAdminKeyring struct {
 }
 
 func (tpl *UbuntuCephAdminKeyring) Options(t *templates.Template) {
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
   if clienthostname, ok := t.Options[CLIENTHOST]; ok {

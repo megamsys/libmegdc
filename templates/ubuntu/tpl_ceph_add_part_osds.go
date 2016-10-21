@@ -23,22 +23,27 @@ import (
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 )
+const(
+  OSDCOUNT = "OsdsCount"
+  DISKPARTS =  "DiskParts"
+)
 
 
-var ubuntuaddosds *UbuntuAddOsds
+var ubuntuaddpartitionosds *UbuntuAddPartitionOsds
 
 func init() {
-	ubuntuaddosds = &UbuntuAddOsds{}
-	templates.Register("UbuntuAddOsds", ubuntuaddosds)
+	ubuntuaddpartitionosds = &UbuntuAddPartitionOsds{}
+	templates.Register("UbuntuAddPartitionOsds", ubuntuaddpartitionosds)
 }
 
-type UbuntuAddOsds struct {
+type UbuntuAddPartitionOsds struct {
 	osds      []string
 	cephuser string
   clienthostname string
+  osdno   string
 }
 
-func (tpl *UbuntuAddOsds) Options(t *templates.Template) {
+func (tpl *UbuntuAddPartitionOsds) Options(t *templates.Template) {
 	if osds, ok := t.Maps[OSDs]; ok {
 		tpl.osds = osds
 	}
@@ -48,32 +53,32 @@ func (tpl *UbuntuAddOsds) Options(t *templates.Template) {
   if clienthostname, ok := t.Options[CLIENTHOST]; ok {
     tpl.clienthostname = clienthostname
   }
+  if osdno, ok := t.Options[CLIENTHOST]; ok {
+    tpl.osdno = osdno
+  }
 }
 
-func (tpl *UbuntuAddOsds) Render(p urknall.Package) {
-	p.AddTemplate("add-osds", &UbuntuAddOsdsTemplate{
+func (tpl *UbuntuAddPartitionOsds) Render(p urknall.Package) {
+	p.AddTemplate("add-osd-part", &UbuntuAddPartitionOsdsTemplate{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
     clienthostname: tpl.clienthostname,
+    osdno: tpl.osdno,
 	})
 }
 
-func (tpl *UbuntuAddOsds) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuAddOsds{
-		osds:     tpl.osds,
-		cephuser: tpl.cephuser,
-		clienthostname: tpl.clienthostname,
-
-	},inputs)
+func (tpl *UbuntuAddPartitionOsds) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target, tpl ,inputs)
 }
 
-type UbuntuAddOsdsTemplate struct {
+type UbuntuAddPartitionOsdsTemplate struct {
   osds     []string
 	cephuser string
   clienthostname string
+  osdno          string
 }
 
-func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
+func (m *UbuntuAddPartitionOsdsTemplate) Render(pkg urknall.Package) {
   CephUser := m.cephuser
 	CephHome := UserHomePrefix + CephUser
   ClientHostName := m.clienthostname
@@ -97,6 +102,6 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
 	pkg.AddCommands("activate-osds",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy admin "+ ClientHostName )),
-		RemoveAllCaches("/var/lib/urknall/add-osds.*"),
+		RemoveAllCaches("/var/lib/urknall/aadd-osd-part.*"),
 	)
 }

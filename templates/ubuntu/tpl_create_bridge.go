@@ -137,6 +137,14 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	network := m.network
 	netmask := m.netmask
 	gateway := m.gateway
+
+  if m.phydev == "" {
+		phydev = "eth0"
+	}
+
+	if m.bridgename == "" {
+		bridgename = "one"
+	}
 	if m.dnsname1 == "" {
 		dnsname1 = "8.8.8.8"
 	} else {
@@ -153,7 +161,7 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("interfaces",
 		Shell("cp /etc/network/interfaces /etc/network/bkinterfaces"),
-		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
+		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
 		Shell("brctl addbr "+bridgename+""),
