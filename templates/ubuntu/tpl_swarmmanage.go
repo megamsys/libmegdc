@@ -41,7 +41,7 @@ stop on (stopped swarmmanage)
 respawn# start the cibd seed
 script
  echo "[$(date -u +%Y-%m-%dT%T.%3NZ)] (sys) swarmmanage starting" >> /var/log/megam/swarmmanage.log
- exec  docker run -t -p 2375:2375 -t swarm manage -H %s:2375 --addr %s:2375  token:%s
+ exec  docker run -t -p 2375:2375 -t swarm manage -H :2375 --addr %s:2375  token:%s
 end script
 post-start script
    PID=$(status swarmmanage | egrep -oi '([0-9]+)$' | head -n1)
