@@ -98,7 +98,11 @@ swarmtoken :=m.swarmtoken
    pkg.AddCommands("dockernodejoin",
  		WriteFile("/etc/init/dockernodejoin.conf", fmt.Sprintf(DockernodejoinConf, nodeip, swarmtoken),Root, 0644),
    	)
+    pkg.AddCommands("mkdir",
+  		Shell("mkdir -p /var/log/megam" ),
+      Shell("mkdir -p /var/run/megam"),
+    )
   pkg.AddCommands("start swarm",
-		 Shell(" start dockernodejoin"),
+		 Shell("start dockernodejoin"),
 	 )
 }

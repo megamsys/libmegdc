@@ -49,7 +49,7 @@ func (m *UbuntuSwarmInstallTemplate) Render(pkg urknall.Package) {
 	 )
 
 	pkg.AddCommands("Run",
-		Shell("docker run--rm swarm create" ),
+		Shell("docker run --rm swarm create" ),
 	)
 
 }
