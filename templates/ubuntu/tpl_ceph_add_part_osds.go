@@ -18,10 +18,9 @@ package ubuntu
 
 
 import (
-	//"os"
-	//"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
+	"strconv"
 )
 const(
   OSDCOUNT = "OsdsCount"
@@ -44,7 +43,7 @@ type UbuntuAddPartitionOsds struct {
 }
 
 func (tpl *UbuntuAddPartitionOsds) Options(t *templates.Template) {
-	if osds, ok := t.Maps[OSDs]; ok {
+	if osds, ok := t.Maps[DISKPARTS]; ok {
 		tpl.osds = osds
 	}
 	if cephuser, ok := t.Options[USERNAME]; ok {
@@ -79,6 +78,7 @@ type UbuntuAddPartitionOsdsTemplate struct {
 }
 
 func (m *UbuntuAddPartitionOsdsTemplate) Render(pkg urknall.Package) {
+	var activate,disks,dirs,mountpoint string
   CephUser := m.cephuser
 	CephHome := UserHomePrefix + CephUser
   ClientHostName := m.clienthostname
@@ -87,20 +87,29 @@ func (m *UbuntuAddPartitionOsdsTemplate) Render(pkg urknall.Package) {
 	} else {
 		CephHome = UserHomePrefix + m.cephuser
 	}
-  prepareosds := ArraytoString(ClientHostName+":","",m.osds)
-	hostname := ClientHostName + ":"
-	activeteosds := ""
-	prefix := "/dev/"
-			for _,v := range m.osds {
-							activeteosds =  activeteosds + hostname + prefix + v + "1" +":"+  prefix + v + "2" + " "
-			}
-
+	osdhome := "/var/lib/ceph/osd/ceph-"
+	osdcount,_ := strconv.Atoi(m.osdno)
+	for i,k := range m.osds {
+		t := osdcount + i
+		no := strconv.Itoa(t)
+	  activate = activate + " " + ClientHostName + ":" + osdhome + no
+		dirs = dirs + " " + osdhome + no
+		mountpoint = mountpoint + " mount " + "/dev/" + k + " "+ osdhome + no + ";"
+	}
+  disks =  ArraytoString("/dev/","",m.osds)
+	pkg.AddCommands("umount",
+		 Shell("umount "+ disks ),
+		 Shell("mkdir "+ dirs ),
+	)
+	pkg.AddCommands("mount",
+		 Shell(mountpoint),
+	)
 	pkg.AddCommands("prepare-osds",
     //AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy --overwrite-conf osd prepare "+ prepareosds )),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy --overwrite-conf osd prepare "+ disks )),
 	)
 	pkg.AddCommands("activate-osds",
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
+		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ disks )),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy admin "+ ClientHostName )),
 		RemoveAllCaches("/var/lib/urknall/aadd-osd-part.*"),
 	)

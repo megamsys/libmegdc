@@ -25,12 +25,11 @@ import (
 
 const (
 	Bridgename = "Bridgename"
+	Dnsnames   = "Dnsnames"
 	PhyDev     = "PhyDev"
 	Network    = "Network"
 	Netmask    = "Netmask"
 	Gateway    = "Gateway"
-	Dnsname1   = "Dnsname1"
-	Dnsname2   = "Dnsname2"
 	Host       = "Host"
 	Interface  = `auto lo
 iface lo inet loopback
@@ -43,7 +42,7 @@ iface %s inet static
   netmask %s
   gateway %s
 bridge_ports %s
-dns-nameservers %s %s
+dns-nameservers %s
 source /etc/network/interfaces.d/*.cfg`
 )
 
@@ -60,8 +59,7 @@ type UbuntuCreateBridge struct {
 	network    string
 	netmask    string
 	gateway    string
-	dnsname1   string
-	dnsname2   string
+	dnsnames   string
 	host       string
 }
 
@@ -81,11 +79,8 @@ func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 	if gateway, ok := t.Options[Gateway]; ok {
 		tpl.gateway = gateway
 	}
-	if dnsname1, ok := t.Options[Dnsname1]; ok {
-		tpl.dnsname1 = dnsname1
-	}
-	if dnsname2, ok := t.Options[Dnsname2]; ok {
-		tpl.dnsname2 = dnsname2
+	if dnsnames, ok := t.Options[Dnsnames]; ok {
+		tpl.dnsnames = dnsnames
 	}
 	if host, ok := t.Options[Host]; ok {
 		tpl.host = host
@@ -99,23 +94,13 @@ func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
 		network:    tpl.network,
 		netmask:    tpl.netmask,
 		gateway:    tpl.gateway,
-		dnsname1:   tpl.dnsname1,
-		dnsname2:   tpl.dnsname2,
+		dnsnames:   tpl.dnsnames,
 		host:       tpl.host,
 	})
 }
 
 func (tpl *UbuntuCreateBridge) Run(target urknall.Target, inputs []string) error {
-	return urknall.Run(target, &UbuntuCreateBridge{
-		bridgename: tpl.bridgename,
-		phydev:     tpl.phydev,
-		network:    tpl.network,
-		netmask:    tpl.netmask,
-		gateway:    tpl.gateway,
-		dnsname1:   tpl.dnsname1,
-		dnsname2:   tpl.dnsname2,
-		host:       tpl.host,
-	}, inputs)
+	return urknall.Run(target, tpl, inputs)
 }
 
 type UbuntuCreateBridgeTemplate struct {
@@ -124,13 +109,12 @@ type UbuntuCreateBridgeTemplate struct {
 	network    string
 	netmask    string
 	gateway    string
-	dnsname1   string
-	dnsname2   string
+	dnsnames   string
 	host       string
 }
 
 func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
-	var dnsname2, dnsname1 string
+	var dnsnames string
 	ip := m.host
 	bridgename := m.bridgename
 	phydev := m.phydev
@@ -145,15 +129,10 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	if m.bridgename == "" {
 		bridgename = "one"
 	}
-	if m.dnsname1 == "" {
-		dnsname1 = "8.8.8.8"
+	if m.dnsnames == "" {
+		dnsnames = "8.8.8.8 8.8.4.4"
 	} else {
-		dnsname1 = m.dnsname1
-	}
-	if m.dnsname2 == "" {
-		dnsname2 = "8.8.4.4"
-	} else {
-		dnsname2 = m.dnsname2
+		dnsnames = m.dnsnames
 	}
 
 	pkg.AddCommands("bridgeutils",
@@ -161,7 +140,7 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("interfaces",
 		Shell("cp /etc/network/interfaces /etc/network/bkinterfaces"),
-		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsname1, dnsname2), "root", 0644),
+		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsnames), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
 		Shell("brctl addbr "+bridgename+""),

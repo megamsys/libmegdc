@@ -55,6 +55,10 @@ func (m *UbuntuOnePasswordResetTemplate) Render(pkg urknall.Package) {
   onepassword := m.onepassword
 
 	 pkg.AddCommands("resetonepassword",
-     Shell("echo '"+oneuser+" : "+onepassword+"' >/var/lib/one/.one/one_auth"),
+     Shell("echo '"+oneuser+":"+onepassword+"' >/var/lib/one/.one/one_auth"),
  	)
+	pkg.AddCommands("one-restart",
+		Shell("service opennebula restart"),
+		Shell("service opennebula-sunstone restart")
+ )
 }

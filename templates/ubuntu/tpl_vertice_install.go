@@ -17,16 +17,15 @@
 package ubuntu
 
 import (
-	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 )
 
-const (
-	apiConf =`sed -i 's/^[ \t]*api = "https:\/\/api.megam.io\/v2".*/    api = "http:\/\/%s:9000\/v2"/' /var/lib/megam/vertice/vertice.conf`
-  nsqdConf = `sed -i 's/^[ \t]*nsqd = \["localhost:4150"\].*/    nsqd = \["%s:4150"\]/' /var/lib/megam/vertice/vertice.conf`
-  scyllaConf = `sed -i 's/^[ \t]*scylla = \["localhost"\].*/    scylla = \["%s"\]/' /var/lib/megam/vertice/vertice.conf`
-)
+// const (
+// 	apiConf =`sed -i 's/^[ \t]*api = "https:\/\/api.megam.io\/v2".*/    api = "http:\/\/%s:9000\/v2"/' /var/lib/megam/vertice/vertice.conf`
+//   nsqdConf = `sed -i 's/^[ \t]*nsqd = \["localhost:4150"\].*/    nsqd = \["%s:4150"\]/' /var/lib/megam/vertice/vertice.conf`
+//   scyllaConf = `sed -i 's/^[ \t]*scylla = \["localhost"\].*/    scylla = \["%s"\]/' /var/lib/megam/vertice/vertice.conf`
+// )
 
 var ubuntuverticeinstall *UbuntuMegamdInstall
 
@@ -65,9 +64,9 @@ func (m *UbuntuMegamdInstallTemplate) Render(pkg urknall.Package) {
 	InstallPackages("vertice"),
 	)
 	pkg.AddCommands("conf",
-	Shell(fmt.Sprintf(apiConf, m.hostip)),
-	Shell(fmt.Sprintf(nsqdConf, m.hostip)),
-	Shell(fmt.Sprintf(scyllaConf, m.hostip)),
+	// Shell(fmt.Sprintf(apiConf, m.hostip)),
+	// Shell(fmt.Sprintf(nsqdConf, m.hostip)),
+	// Shell(fmt.Sprintf(scyllaConf, m.hostip)),
 	Shell("sudo restart vertice"),
 	)
 }

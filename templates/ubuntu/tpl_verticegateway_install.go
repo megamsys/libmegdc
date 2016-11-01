@@ -17,15 +17,14 @@
 package ubuntu
 
 import (
-	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
 )
 
-const (
-	dbConf = `sed -i 's/^[ \t]*scylla.host = "localhost".*/scylla.host = "%s"/' /var/lib/megam/varticegateway/gateway.conf`
-	nsqConf = `sed -i 's/^[ \t]*nsq.url="http:\/\/localhost:4151".*/nsq.url="http:\/\/%s:4151"/' /var/lib/megam/varticegateway/gateway.conf`
-)
+// const (
+// 	dbConf = `sed -i 's/^[ \t]*scylla.host = "localhost".*/scylla.host = "%s"/' /var/lib/megam/varticegateway/gateway.conf`
+// 	nsqConf = `sed -i 's/^[ \t]*nsq.url="http:\/\/localhost:4151".*/nsq.url="http:\/\/%s:4151"/' /var/lib/megam/varticegateway/gateway.conf`
+// )
 
 var ubuntugatewayinstall *UbuntuGatewayInstall
 
@@ -64,8 +63,8 @@ func (m *UbuntuGatewayInstallTemplate) Render(pkg urknall.Package) {
 		InstallPackages("verticegateway"),
 	)
 	pkg.AddCommands("conf",
-	Shell(fmt.Sprintf(dbConf, m.hostip)),
-	Shell(fmt.Sprintf(nsqConf, m.hostip)),
+	// Shell(fmt.Sprintf(dbConf, m.hostip)),
+	// Shell(fmt.Sprintf(nsqConf, m.hostip)),
 	Shell("sudo restart verticegateway"),
 	)
 }
