@@ -44,7 +44,8 @@ respawn limit 0 60
 script
  echo "[$(date -u +%Y-%m-%dT%T.%3NZ)] (sys) dockerdaemon starting" >> /var/log/megam/dockerdaemon.log
  exec docker daemon -D -H tcp://%s:2375 --bip %s >> /var/log/megam/dockerdaemon.log 2>&1
-end scriptpost-start script
+end script
+post-start script
    PID=$(status dockerdaemon | egrep -oi '([0-9]+)$' | head -n1)
    echo $PID > /var/run/megam/dockerdaemon.pid
 end scriptpost-stop script
@@ -113,7 +114,7 @@ subnetmask :=m.subnetmask
 	)
 
 	pkg.AddCommands("stop",
-		Shell("stop Docker"),
+		Shell("stop docker"),
 	)
 
   pkg.AddCommands("start dockerdaemon",
