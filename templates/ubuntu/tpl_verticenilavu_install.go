@@ -17,13 +17,8 @@ package ubuntu
 
 
 import (
-	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-)
-
-const (
-	nilavuConf = `sed -i 's/^[ \t]*bundle exec passenger start -a 127.0.0.1 -p 8080 -d -e production.*/    bundle exec passenger start -a %s -p 8080 -d -e production/' /etc/init/verticenilavu.conf`
 )
 
 var ubuntunilavuinstall *UbuntuNilavuInstall
@@ -58,12 +53,8 @@ type UbuntuNilavuInstallTemplate struct{
 }
 
 func (m *UbuntuNilavuInstallTemplate) Render(pkg urknall.Package) {
-
-	pkg.AddCommands("verticenilavu",
+	pkg.AddCommands("install",
+		InstallPackages("ruby2.3 ruby2.3-dev"),
 		InstallPackages("verticenilavu"),
-	)
-	pkg.AddCommands("conf",
-	Shell(fmt.Sprintf(nilavuConf, m.hostip)),
-	Shell("sudo restart verticenilavu"),
 	)
 }

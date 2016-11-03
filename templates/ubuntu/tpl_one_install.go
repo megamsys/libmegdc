@@ -24,8 +24,17 @@ import (
 const (
 	ONE_INSTALL_LOG = "/var/log/megam/megamcib/opennebula.log"
 	Slash = `\`
+	HOSTNODE = "HostNode"
 	sedUrl = `sed -i 's/^[ \t]*:one_xmlrpc:.*/:one_xmlrpc: http:\/\/%s:2633\/RPC2/' /etc/one/sunstone-server.conf`
+	KnownHostsList = `
+	ConnectTimeout 5
+	Host *
+	StrictHostKeyChecking no
+	`
 )
+
+
+
 
 var ubuntuoneinstall *UbuntuOneInstall
 
@@ -66,6 +75,7 @@ func (m *UbuntuOneInstallTemplate) Render(pkg urknall.Package) {
 	)
 
 	pkg.AddCommands("requires",
+		WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 		Shell("echo 'oneadmin ALL = (root) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/oneadmin"),
 		Shell("sudo chmod 0440 /etc/sudoers.d/oneadmin"),
 		Shell("sed -i 's/^[ \t]*:host:.*/:host: "+ip+"/' /etc/one/sunstone-server.conf"),

@@ -24,7 +24,6 @@ import (
 
 const (
 	Ceph_User = "megdc"
-  Poolname = "one"
   Uid =`uuidgen`
 
 Xml=`<secret ephemeral='no' private='no'>
@@ -47,14 +46,18 @@ func init() {
 type UbuntuCephDatastore struct {
 		uuid string
 		cephuser string
+		poolname string
 }
 
 func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
 	if uuid, ok := t.Options[CLUSTERID]; ok {
 		tpl.uuid = uuid
 	}
-	if cephuser, ok := t.Options[CEPHUSER]; ok {
+	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
+	}
+	if poolname, ok := t.Options[POOLNAME]; ok {
+		tpl.poolname = poolname
 	}
 }
 
@@ -72,6 +75,7 @@ func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error
 type UbuntuCephDatastoreTemplate struct {
 	uuid string
 	cephuser string
+	poolname string
 }
 
 func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
@@ -82,10 +86,15 @@ func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
 	  } else {
 			UserHome = UserHomePrefix + m.cephuser
 		}
+		if m.poolname != "" {
+			poolname = m.poolname
+		} else {
+			poolname = DefaultPoolname
+		}
 
 		pkg.AddCommands("cephdatastore",
-  	AsUser(CephUser,Shell("ceph osd pool create "+Poolname+" 128")),
-		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+Poolname+"'"),
+		Shell("mkdir -p "+UserHome+"/ceph-cluster"),
+		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+poolname+"'"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),
 		Shell("cd "+UserHome+"/ceph-cluster;cp ceph.client.* /etc/ceph"),

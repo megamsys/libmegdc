@@ -22,27 +22,22 @@ import (
 	//"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	//"github.com/megamsys/libgo/cmd"
 )
 
 
-var ubuntuzapdisks *UbuntuZapDisks
+var ubuntucephadminkeyring *UbuntuCephAdminKeyring
 
 func init() {
-	ubuntuzapdisks = &UbuntuZapDisks{}
-	templates.Register("UbuntuZapDisks", ubuntuzapdisks)
+	ubuntucephadminkeyring = &UbuntuCephAdminKeyring{}
+	templates.Register("UbuntuCephAdminKeyring", ubuntucephadminkeyring)
 }
 
-type UbuntuZapDisks struct {
-	osds      []string
+type UbuntuCephAdminKeyring struct {
 	cephuser string
   clienthostname string
 }
 
-func (tpl *UbuntuZapDisks) Options(t *templates.Template) {
-	if osds, ok := t.Maps[OSDs]; ok {
-		tpl.osds = osds
-	}
+func (tpl *UbuntuCephAdminKeyring) Options(t *templates.Template) {
 	if cephuser, ok := t.Options[USERNAME]; ok {
 		tpl.cephuser = cephuser
 	}
@@ -51,41 +46,34 @@ func (tpl *UbuntuZapDisks) Options(t *templates.Template) {
   }
 }
 
-func (tpl *UbuntuZapDisks) Render(p urknall.Package) {
-	p.AddTemplate("zap-disk", &UbuntuZapDisksTemplate{
-		osds:     tpl.osds,
+func (tpl *UbuntuCephAdminKeyring) Render(p urknall.Package) {
+	p.AddTemplate("add-osds", &UbuntuCephAdminKeyringTemplate{
 		cephuser: tpl.cephuser,
     clienthostname: tpl.clienthostname,
 	})
 }
 
-func (tpl *UbuntuZapDisks) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target, &UbuntuZapDisks{
-		osds:     tpl.osds,
-		cephuser: tpl.cephuser,
-		clienthostname: tpl.clienthostname,
-
-	},inputs)
+func (tpl *UbuntuCephAdminKeyring) Run(target urknall.Target,inputs []string) error {
+	return urknall.Run(target,tpl,inputs)
 }
 
-type UbuntuZapDisksTemplate struct {
-  osds     []string
+type UbuntuCephAdminKeyringTemplate struct {
 	cephuser string
   clienthostname string
 }
 
-func (m *UbuntuZapDisksTemplate) Render(pkg urknall.Package) {
+func (m *UbuntuCephAdminKeyringTemplate) Render(pkg urknall.Package) {
   CephUser := m.cephuser
+	CephHome := UserHomePrefix + CephUser
   ClientHostName := m.clienthostname
 	if m.cephuser == "root" {
 		CephHome = "/root"
 	} else {
 		CephHome = UserHomePrefix + m.cephuser
 	}
-  osds := ArraytoString(ClientHostName+":","",m.osds)
 
-	pkg.AddCommands("zap-disks",
-		Shell("rm -rf /var/lib/urknall/add-osds.*"),
-		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy disk zap "+ osds )),
+	pkg.AddCommands("ceph-admin",
+      AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy admin "+ ClientHostName )),
 	)
+
 }
