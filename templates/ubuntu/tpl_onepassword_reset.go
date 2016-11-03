@@ -59,6 +59,6 @@ func (m *UbuntuOnePasswordResetTemplate) Render(pkg urknall.Package) {
  	)
 	pkg.AddCommands("one-restart",
 		Shell("service opennebula restart"),
-		Shell("service opennebula-sunstone restart")
+		Shell("service opennebula-sunstone restart"),
  )
 }

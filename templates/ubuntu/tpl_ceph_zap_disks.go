@@ -85,6 +85,7 @@ func (m *UbuntuZapDisksTemplate) Render(pkg urknall.Package) {
   osds := ArraytoString(ClientHostName+":","",m.osds)
 
 	pkg.AddCommands("zap-disks",
+		Shell("rm -rf /var/lib/urknall/add-osds.*"),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy disk zap "+ osds )),
 	)
 }
