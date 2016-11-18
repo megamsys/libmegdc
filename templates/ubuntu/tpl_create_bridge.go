@@ -34,11 +34,11 @@ const (
 	Interface  = `auto lo
 iface lo inet loopback
 
-auto eth0
+auto %s
 auto %s
 iface %s inet static
   address %s
-  network %s
+	network %s
   netmask %s
   gateway %s
 bridge_ports %s
@@ -140,7 +140,7 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	)
 	pkg.AddCommands("interfaces",
 		Shell("cp /etc/network/interfaces /etc/network/bkinterfaces"),
-		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsnames), "root", 0644),
+		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,phydev, bridgename, bridgename, ip,network, netmask, gateway, phydev, dnsnames), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
 		Shell("brctl addbr "+bridgename+""),
