@@ -33,7 +33,7 @@ type UbuntuNilavuInstall struct{
 }
 
 func (tpl *UbuntuNilavuInstall) Render(p urknall.Package) {
-	p.AddTemplate("nilavu", &UbuntuNilavuInstallTemplate{
+	p.AddTemplate("verticenilavu", &UbuntuNilavuInstallTemplate{
 		hostip: tpl.hostip,
 	})
 }

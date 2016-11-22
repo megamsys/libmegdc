@@ -49,15 +49,12 @@ type UbuntuOneHostInstallTemplate struct{}
 
 func (m *UbuntuOneHostInstallTemplate) Render(pkg urknall.Package) {
 
-	pkg.AddCommands("depends",
+	pkg.AddCommands("depends_install",
 		InstallPackages("build-essential genromfs autoconf libtool qemu-utils libvirt0 bridge-utils lvm2 ssh iproute iputils-arping make"),
 	)
 
-	pkg.AddCommands("one-node",
+	pkg.AddCommands("onenode",
 		InstallPackages("opennebula-node"),
-	)
-
-  pkg.AddCommands("node",
 		Shell("sudo usermod -p $(echo oneadmin | openssl passwd -1 -stdin) oneadmin"),
 	)
 }

@@ -48,7 +48,7 @@ type UbuntuOneInstall struct{
 }
 
 func (tpl *UbuntuOneInstall) Render(p urknall.Package) {
-	p.AddTemplate("one", &UbuntuOneInstallTemplate{
+	p.AddTemplate("onemaster", &UbuntuOneInstallTemplate{
 			hostip:  tpl.hostip,
 	})
 }
@@ -70,11 +70,11 @@ type UbuntuOneInstallTemplate struct{
 func (m *UbuntuOneInstallTemplate) Render(pkg urknall.Package) {
 
 	ip := m.hostip
-	pkg.AddCommands("one-install",
+	pkg.AddCommands("install",
 		InstallPackages("opennebula opennebula-sunstone"),
 	)
 
-	pkg.AddCommands("requires",
+	pkg.AddCommands("prepare",
 		WriteFile("/var/lib/one/.ssh/config",KnownHostsList,"oneadmin", 0755),
 		Shell("echo 'oneadmin ALL = (root) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/oneadmin"),
 		Shell("sudo chmod 0440 /etc/sudoers.d/oneadmin"),

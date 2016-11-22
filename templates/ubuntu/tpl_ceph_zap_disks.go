@@ -52,7 +52,7 @@ func (tpl *UbuntuZapDisks) Options(t *templates.Template) {
 }
 
 func (tpl *UbuntuZapDisks) Render(p urknall.Package) {
-	p.AddTemplate("zap-disk", &UbuntuZapDisksTemplate{
+	p.AddTemplate("zap_disks", &UbuntuZapDisksTemplate{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
     clienthostname: tpl.clienthostname,
@@ -84,7 +84,7 @@ func (m *UbuntuZapDisksTemplate) Render(pkg urknall.Package) {
 	}
   osds := ArraytoString(ClientHostName+":","",m.osds)
 
-	pkg.AddCommands("zap-disks",
+	pkg.AddCommands("clean",
 		Shell("rm -rf /var/lib/urknall/add-osds.*"),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy disk zap "+ osds )),
 	)

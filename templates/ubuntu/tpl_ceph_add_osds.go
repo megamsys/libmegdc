@@ -51,7 +51,7 @@ func (tpl *UbuntuAddOsds) Options(t *templates.Template) {
 }
 
 func (tpl *UbuntuAddOsds) Render(p urknall.Package) {
-	p.AddTemplate("add-osds", &UbuntuAddOsdsTemplate{
+	p.AddTemplate("addosds", &UbuntuAddOsdsTemplate{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,
     clienthostname: tpl.clienthostname,
@@ -90,12 +90,12 @@ func (m *UbuntuAddOsdsTemplate) Render(pkg urknall.Package) {
 							activeteosds =  activeteosds + hostname + prefix + v + "1" +":"+  prefix + v + "2" + " "
 			}
 
-	pkg.AddCommands("prepare-osds",
+	pkg.AddCommands("prepare",
 		Shell("rm -rf /var/lib/urknall/zap-disk.*"),
     //AsUser("root",Shell("sudo chown -R "+ CephUser +":"+ CephUser +" /etc/ceph/ceph.client.admin.keyring")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy --overwrite-conf osd prepare "+ prepareosds )),
 	)
-	pkg.AddCommands("activate-osds",
+	pkg.AddCommands("activate",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy osd activate "+ activeteosds )),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy admin "+ ClientHostName )),
 	)

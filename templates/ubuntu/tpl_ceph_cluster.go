@@ -87,33 +87,27 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
     poolname = DefaultPoolname
   }
 
-	pkg.AddCommands("install-depends",
+	pkg.AddCommands("depends_install",
 		InstallPackages("apt-transport-https  sudo openssh-server ntp sshpass"),
 	)
-	pkg.AddCommands("install-ceph",
+	pkg.AddCommands("install",
 		InstallPackages("ceph-deploy ceph-common ceph-mds ceph"),
 	)
 
-	pkg.AddCommands("etchost",
-		Shell("echo '"+ip+" "+host+"' >> /etc/hosts"),
-	)
-//checking have to add if key exist
-		pkg.AddCommands("ssh-keygen",
+		pkg.AddCommands("access_prepare",
+      Shell("echo '"+ip+" "+host+"' >> /etc/hosts"),
 			Mkdir(CephHome+"/.ssh", CephUser, 0700),
 			AsUser(CephUser, Shell("ssh-keygen -N '' -t rsa -f "+CephHome+"/.ssh/id_rsa")),
 			AsUser(CephUser, Shell("cat "+CephHome+"/.ssh/id_rsa.pub >>"+CephHome+"/.ssh/authorized_keys")),
+      WriteFile(CephHome+"/.ssh/ssh_config", StrictHostKey, CephUser, 0755),
+  		WriteFile(CephHome+"/.ssh/config", fmt.Sprintf(SSHHostConfig, host, host, CephUser), CephUser, 0755),
 		)
 
-	pkg.AddCommands("ssh_known_hosts",
-		WriteFile(CephHome+"/.ssh/ssh_config", StrictHostKey, CephUser, 0755),
-		WriteFile(CephHome+"/.ssh/config", fmt.Sprintf(SSHHostConfig, host, host, CephUser), CephUser, 0755),
-	)
-
-	pkg.AddCommands("new-cluster",
+	pkg.AddCommands("create_new",
 		AsUser(CephUser, Shell("mkdir -p "+CephHome+"/ceph-cluster")),
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy new "+host)),
 	)
-	pkg.AddCommands("write_cephconf",
+	pkg.AddCommands("configure",
     AsUser(CephUser, Shell("sed -i \"s/^[ ]*mon_host.*/mon_host = "+ip+"/\" "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'osd_pool_default_size = 2' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'osd crush chooseleaf type = 1' >> "+CephHome+"/ceph-cluster/ceph.conf")),
@@ -122,13 +116,13 @@ func (m *UbuntuCephClusterInstallTemplate) Render(pkg urknall.Package) {
 		AsUser(CephUser, Shell("echo 'osd max object namespace len = 64' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 		AsUser(CephUser, Shell("echo 'rbd default features = 1' >> "+CephHome+"/ceph-cluster/ceph.conf")),
 	)
-	pkg.AddCommands("mon-init",
+	pkg.AddCommands("mon_init",
 		AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;ceph-deploy mon create-initial")),
     AsUser(CephUser, Shell("cd "+CephHome+"/ceph-cluster;sudo cp ceph.client.* /etc/ceph/")),
     Shell("sudo chmod +r /etc/ceph/ceph.client.admin.keyring"),
     Shell("sudo chown -R "+CephUser+":"+CephUser+" /etc/ceph/ceph.client.admin.keyring"),
 	)
-  	pkg.AddCommands("create-pool",
+  	pkg.AddCommands("create_pool",
       AsUser(CephUser, Shell("ceph osd pool create "+poolname+" 128")),
     )
 }

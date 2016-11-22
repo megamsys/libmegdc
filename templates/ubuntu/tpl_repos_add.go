@@ -44,7 +44,7 @@ type UbuntuAddReposTemplate struct{
 
 func (m *UbuntuAddReposTemplate) Render(pkg urknall.Package) {
 
-  pkg.AddCommands("addrepos",
+  pkg.AddCommands("packages",
     Shell(m.repos),
 		Shell("apt-get update -y"),
   )

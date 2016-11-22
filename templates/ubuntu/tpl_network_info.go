@@ -46,24 +46,10 @@ type UbuntuNetworkInfoTemplate struct{
 func (m *UbuntuNetworkInfoTemplate) Render(pkg urknall.Package) {
   pkg.AddCommands("interface",
     Shell(fmt.Sprintf(Iface, m.host)),
+			Shell(fmt.Sprintf(Grep,"network")),
+			Shell(fmt.Sprintf(Grep,"gateway")),
+			Shell(fmt.Sprintf(Grep,"broadcast")),
+			Shell("grep dns-nameservers /etc/network/interfaces | awk -F ' ' '{print $2 \" \" $3}'"),
+			Shell(fmt.Sprintf(Grep,"dns-search")),
   )
-  pkg.AddCommands("network",
-		Shell(fmt.Sprintf(Grep,"network")),
-	)
-  pkg.AddCommands("netmask",
-		Shell(fmt.Sprintf(Grep,"netmask")),
-	)
-  pkg.AddCommands("gateway",
-  	Shell(fmt.Sprintf(Grep,"gateway")),
-		)
-	pkg.AddCommands("broadcast",
-				Shell(fmt.Sprintf(Grep,"broadcast")),
-	)
-  pkg.AddCommands("nameservers",
-    Shell("grep dns-nameservers /etc/network/interfaces | awk -F ' ' '{print $2 \" \" $3}'"),
-  )
-  pkg.AddCommands("search",
-    Shell(fmt.Sprintf(Grep,"dns-search")),
-  )
-
 }

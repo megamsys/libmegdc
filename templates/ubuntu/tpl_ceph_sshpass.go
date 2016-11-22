@@ -38,7 +38,7 @@ type UbuntuEnableCephAccess struct {
 }
 
 func (tpl *UbuntuEnableCephAccess) Render(p urknall.Package) {
-	p.AddTemplate("enablecephaccess", &UbuntuEnableCephAccessTemplate{
+	p.AddTemplate("pass_pubkey", &UbuntuEnableCephAccessTemplate{
 		cephuser:       tpl.cephuser,
 		clientuser:     tpl.clientuser,
 		clienthostname: tpl.clienthostname,
@@ -84,7 +84,6 @@ type UbuntuEnableCephAccessTemplate struct {
 
 func (m *UbuntuEnableCephAccessTemplate) Render(pkg urknall.Package) {
 	ClientIP := m.clientip
-	ClientHostName := m.clienthostname
 	ClientUser := m.clientuser
 	CephUser := m.cephuser
 	if m.cephuser == "root" {
@@ -100,22 +99,16 @@ func (m *UbuntuEnableCephAccessTemplate) Render(pkg urknall.Package) {
 		ClientHome = UserHomePrefix + m.clientuser
 	}
 
-	pkg.AddCommands("SSHPass",
-		Shell("echo '"+ ClientIP +"  "+ ClientHostName +"' >> /etc/hosts"),
-		WriteFile(CephHome +"/.ssh/config", KnownHostsList, CephUser, 0755),
-	)
 	//temp fix for VM , if no password means have to change for key access
 
 	if ClientPassword != "" {
-		pkg.AddCommands("install-sshpass",
-			InstallPackages("sshpass"),
-		)
-		pkg.AddCommands("pass-pub-key",
+		pkg.AddCommands("using_password",
+		InstallPackages("sshpass"),
 		AsUser(CephUser,Shell("sshpass -p " + ClientPassword +" scp -o StrictHostKeyChecking=no " + CephHome + "/.ssh/id_rsa.pub " + ClientUser + "@" + ClientIP + ":" + ClientHome + "/.ssh/authorized_keys")),
 		)
 	} else {
 		//using private key
-		pkg.AddCommands("pass-pub-key",
+		pkg.AddCommands("using_key",
 		WriteFile(CephHome +"/client_key", ClientKey, CephUser, 0600),
 		AsUser(CephUser, Shell("ssh -i "+ CephHome +"/client_key" +" -o StrictHostKeyChecking=no " + ClientUser + "@" + ClientIP + " \"cat >>" + ClientHome + "/.ssh/authorized_keys\" <" + CephHome + "/.ssh/id_rsa.pub ")),
 		)

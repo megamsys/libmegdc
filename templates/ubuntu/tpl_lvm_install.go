@@ -75,11 +75,11 @@ func (m *UbuntuLvmInstallTemplate) Render(pkg urknall.Package) {
 		vg = DefaultVG
 	}
 
-	pkg.AddCommands("lvminstall",
+	pkg.AddCommands("install",
 		UpdatePackagesOmitError(),
 		InstallPackages("clvm lvm2 kvm"),
 	)
-	pkg.AddCommands("vg-setup",
+	pkg.AddCommands("vg_create",
 		Shell("pvcreate "+diskdir),
 		Shell("vgcreate "+vg+" "+diskdir),
 	)
