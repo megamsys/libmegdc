@@ -29,22 +29,14 @@ func (tpl *UbuntuHostInfo) Run(target urknall.Target,inputs []string) error {
 type UbuntuHostInfoTemplate struct{}
 
 func (m *UbuntuHostInfoTemplate) Render(pkg urknall.Package) {
-  pkg.AddCommands("memory",
+  pkg.AddCommands("get_config",
     Shell("free -m"),
-  )
-  pkg.AddCommands("disk",
 		Shell("lsblk"),
-	)
-  pkg.AddCommands("cpu",
 		Shell("lscpu | grep \"CPU(s):\" "),
-	)
-  pkg.AddCommands("hostname",
 		Shell("hostname"),
-	)
-  pkg.AddCommands("os",
-  	Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
-		)
-	pkg.AddCommands("kvm-ok",
+		Shell("grep PRETTY_NAME /etc/*-release | awk -F '=\"' '{print $2}'"),
+  )
+	pkg.AddCommands("kvm-check",
 				Shell("if [ -c /dev/kvm ]; then echo 'KVM acceleration can be used'; else echo 'KVM acceleration can not be used'; fi;"),
 	)
 

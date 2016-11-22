@@ -44,11 +44,9 @@ func (m *UbuntuCephClientInstallTemplate) Render(pkg urknall.Package) {
 	} else {
 		CephHome = UserHomePrefix + m.cephuser
 	}
-  pkg.AddCommands("update",
-    Shell("apt-get update -y"),
-  )
-  pkg.AddCommands("ceph-common",
+  pkg.AddCommands("install",
+		Shell("apt-get update -y"),
 		InstallPackages("ceph-common ceph ceph-mds ca-certificates apt-transport-https"),
-		Shell("mkdir -p "+CephHome+"/.ssh"),
+		Mkdir(CephHome+"/.ssh",m.cephuser,0700),
 	)
 }

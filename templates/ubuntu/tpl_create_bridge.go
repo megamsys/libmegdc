@@ -34,11 +34,11 @@ const (
 	Interface  = `auto lo
 iface lo inet loopback
 
-auto eth0
+auto %s
 auto %s
 iface %s inet static
   address %s
-  network %s
+	network %s
   netmask %s
   gateway %s
 bridge_ports %s
@@ -88,7 +88,7 @@ func (tpl *UbuntuCreateBridge) Options(t *templates.Template) {
 }
 
 func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
-	p.AddTemplate("bridge", &UbuntuCreateBridgeTemplate{
+	p.AddTemplate("kvm_network", &UbuntuCreateBridgeTemplate{
 		bridgename: tpl.bridgename,
 		phydev:     tpl.phydev,
 		network:    tpl.network,
@@ -122,7 +122,7 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 	netmask := m.netmask
 	gateway := m.gateway
 
-  if m.phydev == "" {
+	if m.phydev == "" {
 		phydev = "eth0"
 	}
 
@@ -135,17 +135,13 @@ func (m *UbuntuCreateBridgeTemplate) Render(pkg urknall.Package) {
 		dnsnames = m.dnsnames
 	}
 
-	pkg.AddCommands("bridgeutils",
+	pkg.AddCommands("configure",
 		Shell("apt-get install -y bridge-utils"),
-	)
-	pkg.AddCommands("interfaces",
 		Shell("cp /etc/network/interfaces /etc/network/bkinterfaces"),
-		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface,bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsnames), "root", 0644),
+		WriteFile("/etc/network/interfaces", fmt.Sprintf(Interface, phydev, bridgename, bridgename, ip, network, netmask, gateway, phydev, dnsnames), "root", 0644),
 	)
 	pkg.AddCommands("create-bridge",
 		Shell("brctl addbr "+bridgename+""),
-	)
-	pkg.AddCommands("list-bridge",
 		Shell("brctl show"),
 	)
 

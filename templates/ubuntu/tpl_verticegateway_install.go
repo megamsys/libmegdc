@@ -33,7 +33,7 @@ type UbuntuGatewayInstall struct{
 }
 
 func (tpl *UbuntuGatewayInstall) Render(p urknall.Package) {
-	p.AddTemplate("gateway", &UbuntuGatewayInstallTemplate{
+	p.AddTemplate("verticegateway", &UbuntuGatewayInstallTemplate{
 				hostip: tpl.hostip,
 	})
 }

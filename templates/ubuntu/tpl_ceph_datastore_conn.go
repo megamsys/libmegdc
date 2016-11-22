@@ -17,23 +17,23 @@
 package ubuntu
 
 import (
+	"fmt"
 	"github.com/megamsys/libmegdc/templates"
 	"github.com/megamsys/urknall"
-	"fmt"
 )
 
 const (
 	Ceph_User = "megdc"
-  Uid =`uuidgen`
+	Uid       = `uuidgen`
 
-Xml=`<secret ephemeral='no' private='no'>
+	Xml = `<secret ephemeral='no' private='no'>
   <uuid>%v</uuid>
   <usage type='ceph'>
           <name>client.libvirt secret</name>
   </usage>
 </secret>`
-Setval=`sudo virsh secret-set-value --secret %v --base64 $(cat client.libvirt.key)`
-Echo =`echo '%v'`
+	Setval = `sudo virsh secret-set-value --secret %v --base64 $(cat client.libvirt.key)`
+	Echo   = `echo '%v'`
 )
 
 var ubuntucephdatastore *UbuntuCephDatastore
@@ -44,9 +44,9 @@ func init() {
 }
 
 type UbuntuCephDatastore struct {
-		uuid string
-		cephuser string
-		poolname string
+	uuid     string
+	cephuser string
+	poolname string
 }
 
 func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
@@ -63,45 +63,47 @@ func (tpl *UbuntuCephDatastore) Options(t *templates.Template) {
 
 func (tpl *UbuntuCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &UbuntuCephDatastoreTemplate{
-		uuid: tpl.uuid,
+		uuid:     tpl.uuid,
 		cephuser: tpl.cephuser,
 	})
 }
 
-func (tpl *UbuntuCephDatastore) Run(target urknall.Target,inputs []string) error {
-	return urknall.Run(target,tpl,inputs)
+func (tpl *UbuntuCephDatastore) Run(target urknall.Target, inputs []string) error {
+	return urknall.Run(target, tpl, inputs)
 }
 
 type UbuntuCephDatastoreTemplate struct {
-	uuid string
+	uuid     string
 	cephuser string
 	poolname string
 }
 
 func (m *UbuntuCephDatastoreTemplate) Render(pkg urknall.Package) {
 	var UserHome string
-    Uid := m.uuid
-		if m.cephuser == "root" {
-	    UserHome = "/" +  m.cephuser
-	  } else {
-			UserHome = UserHomePrefix + m.cephuser
-		}
-		if m.poolname != "" {
-			poolname = m.poolname
-		} else {
-			poolname = DefaultPoolname
-		}
+	Uid := m.uuid
+	if m.cephuser == "root" {
+		UserHome = "/" + m.cephuser
+	} else {
+		UserHome = UserHomePrefix + m.cephuser
+	}
+	if m.poolname != "" {
+		poolname = m.poolname
+	} else {
+		poolname = DefaultPoolname
+	}
 
-		pkg.AddCommands("cephdatastore",
+	pkg.AddCommands("create_authkey",
 		Shell("mkdir -p "+UserHome+"/ceph-cluster"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-or-create client.libvirt mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool="+poolname+"'"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get-key client.libvirt | tee client.libvirt.key"),
 		Shell("cd "+UserHome+"/ceph-cluster;ceph auth get client.libvirt -o ceph.client.libvirt.keyring"),
 		Shell("cd "+UserHome+"/ceph-cluster;cp ceph.client.* /etc/ceph"),
-		Shell("cd "+UserHome+"/ceph-cluster; "+fmt.Sprintf(Echo,Uid)+" >uid"),
-		WriteFile(UserHome + "/ceph-cluster" + "/secret.xml",fmt.Sprintf(Xml,Uid),"root",644),
+		Shell("cd "+UserHome+"/ceph-cluster; "+fmt.Sprintf(Echo, Uid)+" >uid"),
+		WriteFile(UserHome+"/ceph-cluster"+"/secret.xml", fmt.Sprintf(Xml, Uid), "root", 644),
+	)
+	pkg.AddCommands("define_secretkey",
 		InstallPackages("libvirt-bin"),
 		Shell("cd "+UserHome+"/ceph-cluster;sudo virsh secret-define secret.xml"),
-		Shell("cd "+UserHome+"/ceph-cluster;"+ fmt.Sprintf(Setval,Uid)),
+		Shell("cd "+UserHome+"/ceph-cluster;"+fmt.Sprintf(Setval, Uid)),
 	)
 }
