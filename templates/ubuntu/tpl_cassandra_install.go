@@ -45,7 +45,7 @@ func (tpl *UbuntuCassandraInstall) Render(p urknall.Package) {
 	p.AddTemplate("cassandra", &UbuntuCassandraInstallTemplate{})
 }
 
-func (tpl *UbuntuCassandraInstall) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuCassandraInstall) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, tpl, inputs)
 }
 

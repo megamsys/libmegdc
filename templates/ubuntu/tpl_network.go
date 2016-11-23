@@ -100,7 +100,7 @@ func (tpl *UbuntuCreateNetworkOpennebula) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuCreateNetworkOpennebula) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCreateNetworkOpennebula) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCreateNetworkOpennebula{
 		bridge:     tpl.bridge,
     iptype:     tpl.iptype,

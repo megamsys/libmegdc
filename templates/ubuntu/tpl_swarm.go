@@ -37,7 +37,7 @@ func (tpl *UbuntuSwarmInstall) Render(p urknall.Package) {
 	p.AddTemplate("swarm", &UbuntuSwarmInstallTemplate{})
 }
 
-func (tpl *UbuntuSwarmInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuSwarmInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuSwarmInstall{},inputs)
 }
 

@@ -63,7 +63,7 @@ sparkversion :  tpl.sparkversion,
 	})
 }
 
-func (tpl *UbuntuMesosSlaveInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuMesosSlaveInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuMesosSlaveInstall{
 		masterip:    tpl.masterip,
     sparkversion: tpl.sparkversion,

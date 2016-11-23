@@ -37,7 +37,7 @@ func (tpl *CentosNilavuRemove) Render(p urknall.Package) {
 func (tpl *CentosNilavuRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosNilavuRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosNilavuRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosNilavuRemove{},inputs)
 }
 

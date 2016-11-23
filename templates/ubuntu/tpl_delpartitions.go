@@ -67,7 +67,7 @@ func (tpl *UbuntuDeletePartitions) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuDeletePartitions) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuDeletePartitions) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuDeletePartitions{
 		disks: tpl.disks,
 	}, inputs)

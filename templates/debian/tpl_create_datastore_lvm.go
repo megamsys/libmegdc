@@ -74,7 +74,7 @@ func (tpl *DebianCreateDatastoreLvm) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateDatastoreLvm) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianCreateDatastoreLvm) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianCreateDatastoreLvm{
 		poolname:     tpl.poolname,
     vgname:     tpl.vgname,

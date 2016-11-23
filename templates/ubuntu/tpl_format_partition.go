@@ -56,7 +56,7 @@ func (tpl *UbuntuFormatPartitions) Render(p urknall.Package) {
   })
 }
 
-func (tpl *UbuntuFormatPartitions) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuFormatPartitions) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuFormatPartitions{
     mount : tpl.mount,
     partitions : tpl.partitions,

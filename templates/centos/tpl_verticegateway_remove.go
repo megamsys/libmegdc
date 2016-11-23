@@ -37,7 +37,7 @@ func (tpl *CentosGatewayRemove) Render(p urknall.Package) {
 func (tpl *CentosGatewayRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosGatewayRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosGatewayRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosGatewayRemove{},inputs)
 }
 

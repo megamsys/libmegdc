@@ -37,7 +37,7 @@ func (tpl *CentosMegamCommonRemove) Render(p urknall.Package) {
 func (tpl *CentosMegamCommonRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosMegamCommonRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosMegamCommonRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosMegamCommonRemove{},inputs)
 }
 

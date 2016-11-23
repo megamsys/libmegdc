@@ -88,7 +88,7 @@ func (tpl *UbuntuCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephGateway) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCephGateway) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCephGateway{},inputs)
 }
 

@@ -36,7 +36,7 @@ var runnables map[string]TemplateRunnable
 
 type TemplateRunnable interface {
 	Options(t *Template)
-	Run(target urknall.Target, inputs []string) error
+	Run(target urknall.Target, inputs map[string]string) error
 }
 
 type Template struct {
@@ -52,7 +52,7 @@ func NewTemplate() *Template {
 	return &Template{}
 }
 
-func (t *Template) Run(w io.Writer, inputs []string) error {
+func (t *Template) Run(w io.Writer, inputs map[string]string) error {
 	defer urknall.OpenLogger(w).Close()
 	var target urknall.Target
 	var err error

@@ -42,7 +42,7 @@ func (tpl *DebianOneHostInstall) Render(p urknall.Package) {
 func (tpl *DebianOneHostInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianOneHostInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianOneHostInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianOneHostInstall{},inputs)
 }
 

@@ -59,7 +59,7 @@ func (tpl *UbuntuZapDisks) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuZapDisks) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuZapDisks) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuZapDisks{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,

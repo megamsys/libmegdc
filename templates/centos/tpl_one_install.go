@@ -46,7 +46,7 @@ func (tpl *CentosOneInstall) Render(p urknall.Package) {
 
 func (tpl *CentosOneInstall) Options(t *templates.Template) {}
 
-func (tpl *CentosOneInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosOneInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosOneInstall{},inputs)
 }
 

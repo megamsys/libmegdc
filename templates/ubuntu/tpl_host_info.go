@@ -22,7 +22,7 @@ func (tpl *UbuntuHostInfo) Render(p urknall.Package) {
 
 func (tpl *UbuntuHostInfo) Options(t *templates.Template) {}
 
-func (tpl *UbuntuHostInfo) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuHostInfo) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuHostInfo{},inputs)
 }
 

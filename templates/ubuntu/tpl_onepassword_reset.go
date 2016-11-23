@@ -43,7 +43,7 @@ func (tpl *UbuntuOnePasswordReset) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *UbuntuOnePasswordReset) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuOnePasswordReset) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuOnePasswordResetTemplate{
 		oneuser:     tpl.oneuser,
   onepassword:     tpl.onepassword,

@@ -37,7 +37,7 @@ func (tpl *UbuntuGatewayRemove) Render(p urknall.Package) {
 func (tpl *UbuntuGatewayRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuGatewayRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuGatewayRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuGatewayRemove{},inputs)
 }
 

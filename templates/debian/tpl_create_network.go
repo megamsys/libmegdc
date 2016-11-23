@@ -56,7 +56,7 @@ func (tpl *DebianCreateNetwork) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *DebianCreateNetwork) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianCreateNetwork) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianCreateNetwork{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,

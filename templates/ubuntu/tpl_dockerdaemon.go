@@ -84,7 +84,7 @@ func (tpl *UbuntuDockerInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuDockerInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuDockerInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuDockerInstall{
     hostip : tpl.hostip,
     subnetmask : tpl.subnetmask,

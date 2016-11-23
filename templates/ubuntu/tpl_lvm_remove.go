@@ -60,7 +60,7 @@ func (tpl *UbuntuLvmRemove) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuLvmRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuLvmRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuLvmRemove{
 		lvname:     tpl.lvname,
 		vgname:     tpl.vgname,

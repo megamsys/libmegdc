@@ -43,7 +43,7 @@ func (tpl *UbuntuVerticeReport) Render(p urknall.Package) {
 func (tpl *UbuntuVerticeReport) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuVerticeReport) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuVerticeReport) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuVerticeReport{},inputs)
 }
 

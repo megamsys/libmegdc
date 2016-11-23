@@ -73,7 +73,7 @@ func (tpl *CentosCreateDatastoreLvm) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateDatastoreLvm) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCreateDatastoreLvm) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCreateDatastoreLvm{
 		poolname:     tpl.poolname,
     vgname:     tpl.vgname,

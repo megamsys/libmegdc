@@ -38,7 +38,7 @@ func (tpl *DebianOneHostRemove) Render(p urknall.Package) {
 func (tpl *DebianOneHostRemove) Options(t *templates.Template) {
 }
 
-func (tpl *DebianOneHostRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianOneHostRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianOneHostRemove{},inputs)
 }
 

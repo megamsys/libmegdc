@@ -45,7 +45,7 @@ func (tpl *CentosCephRemove) Render(p urknall.Package) {
 })
 }
 
-func (tpl *CentosCephRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCephRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCephRemove{
 		cephuser: tpl.cephuser,
 	},inputs)

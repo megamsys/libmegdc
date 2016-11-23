@@ -38,7 +38,7 @@ func (tpl *DebianVerticeConfig) Render(p urknall.Package) {
 func (tpl *DebianVerticeConfig) Options(t *templates.Template) {
 }
 
-func (tpl *DebianVerticeConfig) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianVerticeConfig) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianVerticeConfig{},inputs)
 }
 

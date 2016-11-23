@@ -44,7 +44,7 @@ func (tpl *UbuntuMegamdInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuMegamdInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuMegamdInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target,tpl,inputs)
 }
 

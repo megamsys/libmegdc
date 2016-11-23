@@ -43,7 +43,7 @@ func (tpl *UbuntuRubyInstall) Render(p urknall.Package) {
 	p.AddTemplate("ruby", &UbuntuRubyInstallTemplate{})
 }
 
-func (tpl *UbuntuRubyInstall) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuRubyInstall) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, tpl, inputs)
 }
 

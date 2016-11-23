@@ -29,7 +29,7 @@ func (tpl *UbuntuCephClientInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuCephClientInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCephClientInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, tpl,inputs)
 }
 

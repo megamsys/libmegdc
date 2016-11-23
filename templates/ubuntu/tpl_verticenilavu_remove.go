@@ -37,7 +37,7 @@ func (tpl *UbuntuNilavuRemove) Render(p urknall.Package) {
 func (tpl *UbuntuNilavuRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuNilavuRemove) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuNilavuRemove) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuNilavuRemove{}, inputs)
 }
 

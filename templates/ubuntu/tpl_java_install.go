@@ -42,7 +42,7 @@ func (tpl *UbuntuJavaInstall) Render(p urknall.Package) {
 	p.AddTemplate("java", &UbuntuJavaInstallTemplate{})
 }
 
-func (tpl *UbuntuJavaInstall) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuJavaInstall) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, tpl, inputs)
 }
 

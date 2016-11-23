@@ -66,7 +66,7 @@ func (tpl *UbuntuAddPartitionOsds) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuAddPartitionOsds) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuAddPartitionOsds) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, tpl ,inputs)
 }
 

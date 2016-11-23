@@ -55,7 +55,7 @@ func (tpl *UbuntuCreateNetwork) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCreateNetwork) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCreateNetwork) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCreateNetwork{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,

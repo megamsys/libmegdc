@@ -44,7 +44,7 @@ func (tpl *UbuntuGatewayInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuGatewayInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuGatewayInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuGatewayInstall{},inputs)
 }
 

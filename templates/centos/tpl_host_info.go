@@ -39,7 +39,7 @@ func (tpl *CentosHostInfo) Render(p urknall.Package) {
 func (tpl *CentosHostInfo) Options(t *templates.Template) {
 }
 
-func (tpl *CentosHostInfo) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosHostInfo) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosHostInfo{},inputs)
 }
 

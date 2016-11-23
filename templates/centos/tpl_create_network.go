@@ -55,7 +55,7 @@ func (tpl *CentosCreateNetwork) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentosCreateNetwork) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCreateNetwork) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCreateNetwork{
 		BridgeName: tpl.BridgeName,
 		PhyDev:     tpl.PhyDev,

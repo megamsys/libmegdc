@@ -79,7 +79,7 @@ func (tpl *UbuntuDockerNodeJoinInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuDockerNodeJoinInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuDockerNodeJoinInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuDockerNodeJoinInstall{
     swarmtoken : tpl.swarmtoken,
   nodeip : tpl.nodeip,

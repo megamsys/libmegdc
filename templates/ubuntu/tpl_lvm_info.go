@@ -22,7 +22,7 @@ func (tpl *UbuntuParseExistLvm) Render(p urknall.Package) {
 
 func (tpl *UbuntuParseExistLvm) Options(t *templates.Template) {}
 
-func (tpl *UbuntuParseExistLvm) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuParseExistLvm) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuParseExistLvm{},inputs)
 }
 
