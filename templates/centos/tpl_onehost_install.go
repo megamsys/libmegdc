@@ -42,7 +42,7 @@ func (tpl *CentosOneHostInstall) Render(p urknall.Package) {
 func (tpl *CentosOneHostInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentosOneHostInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosOneHostInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosOneHostInstall{},inputs)
 }
 

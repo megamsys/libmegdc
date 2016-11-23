@@ -84,7 +84,7 @@ func (tpl *UbuntuCephInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCephInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCephInstall{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,

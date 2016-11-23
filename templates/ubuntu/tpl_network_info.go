@@ -35,7 +35,7 @@ func (tpl *UbuntuNetworkInfo) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuNetworkInfo) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuNetworkInfo) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, tpl,inputs)
 }
 

@@ -101,7 +101,7 @@ func (tpl *DebianCreateBridge) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *DebianCreateBridge) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianCreateBridge) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianCreateBridge{
 		bridgename:     tpl.bridgename,
     phydev:     tpl.phydev,

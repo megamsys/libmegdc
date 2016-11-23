@@ -73,7 +73,7 @@ func (tpl *UbuntuCreateOneImage) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCreateOneImage) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuCreateOneImage) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCreateOneImage{
 		datastoreid: tpl.datastoreid,
 		name:        tpl.name,

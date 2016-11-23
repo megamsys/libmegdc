@@ -49,7 +49,7 @@ func (tpl *UbuntuCephPoolCreate) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephPoolCreate) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCephPoolCreate) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target,tpl,inputs)
 }
 

@@ -38,7 +38,7 @@ func (tpl *UbuntuMegamCommonInstall) Render(p urknall.Package) {
 func (tpl *UbuntuMegamCommonInstall) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuMegamCommonInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuMegamCommonInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuMegamCommonInstall{},inputs)
 }
 

@@ -38,7 +38,7 @@ func (tpl *DebianGatewayInstall) Render(p urknall.Package) {
 func (tpl *DebianGatewayInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianGatewayInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianGatewayInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianGatewayInstall{},inputs)
 }
 

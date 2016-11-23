@@ -38,7 +38,7 @@ func (tpl *CentosOneHostRemove) Render(p urknall.Package) {
 func (tpl *CentosOneHostRemove) Options(t *templates.Template) {
 }
 
-func (tpl *CentosOneHostRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosOneHostRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosOneHostRemove{},inputs)
 }
 

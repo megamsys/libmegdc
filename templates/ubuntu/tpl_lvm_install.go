@@ -54,7 +54,7 @@ func (tpl *UbuntuLvmInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuLvmInstall) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuLvmInstall) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuLvmInstall{
 		disks:  tpl.disks,
 		vgname: tpl.vgname,

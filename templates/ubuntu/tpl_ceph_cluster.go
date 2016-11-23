@@ -61,7 +61,7 @@ func (tpl *UbuntuCephClusterInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCephClusterInstall) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuCephClusterInstall) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target,tpl, inputs)
 }
 

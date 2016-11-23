@@ -100,7 +100,7 @@ func (tpl *CentosCreateNetworkOpennebula) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateNetworkOpennebula) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCreateNetworkOpennebula) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCreateNetworkOpennebula{
 		bridge:     tpl.bridge,
     iptype:     tpl.iptype,

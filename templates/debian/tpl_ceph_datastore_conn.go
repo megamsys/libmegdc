@@ -54,7 +54,7 @@ func (tpl *DebianCephDatastore) Render(p urknall.Package) {
 	p.AddTemplate("cephds", &DebianCephDatastoreTemplate{})
 }
 
-func (tpl *DebianCephDatastore) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianCephDatastore) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianCephDatastore{},inputs)
 }
 

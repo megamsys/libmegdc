@@ -69,7 +69,7 @@ func (tpl *CentosAttachOneHost) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosAttachOneHost) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosAttachOneHost) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosAttachOneHost{
 		infodriver:     tpl.infodriver,
     vm:     tpl.vm,

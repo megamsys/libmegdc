@@ -99,7 +99,7 @@ func (tpl *UbuntuCreateBridge) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuCreateBridge) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuCreateBridge) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, tpl, inputs)
 }
 

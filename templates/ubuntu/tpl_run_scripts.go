@@ -32,7 +32,7 @@ func (tpl *UbuntuRunCustomScripts) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuRunCustomScripts) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuRunCustomScripts) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuRunCustomScripts{
 		scripts: tpl.scripts,
 	}, inputs)

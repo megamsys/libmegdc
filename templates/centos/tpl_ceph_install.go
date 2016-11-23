@@ -84,7 +84,7 @@ func (tpl *CentosCephInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentosCephInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCephInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCephInstall{
 		osds:     tpl.osds,
 		cephuser: tpl.cephuser,

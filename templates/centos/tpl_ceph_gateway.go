@@ -89,7 +89,7 @@ func (tpl *CentosCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *CentosCephGateway) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCephGateway) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCephGateway{},inputs)
 }
 

@@ -47,7 +47,7 @@ if hs, ok := t.Options[HOSTNODE]; ok {
 }
 
 
-func (tpl *UbuntuSshPass) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuSshPass) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuSshPass{
 		Host: tpl.Host,
 	},inputs)

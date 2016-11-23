@@ -59,7 +59,7 @@ func (tpl *UbuntuOneInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuOneInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuOneInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, tpl,inputs)
 }
 

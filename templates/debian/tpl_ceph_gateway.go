@@ -89,7 +89,7 @@ func (tpl *DebianCephGateway) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *DebianCephGateway) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianCephGateway) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianCephGateway{},inputs)
 }
 

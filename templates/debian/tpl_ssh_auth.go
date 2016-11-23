@@ -56,7 +56,7 @@ if hs, ok := t.Options["HOST"]; ok {
 }
 
 
-func (tpl *DebianSshPass) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianSshPass) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianSshPass{
 		Host: tpl.Host,
 	},inputs)

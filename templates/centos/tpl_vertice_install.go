@@ -39,7 +39,7 @@ func (tpl *CentosMegamdInstall) Render(p urknall.Package) {
 func (tpl *CentosMegamdInstall) Options(t *templates.Template) {
 }
 
-func (tpl *CentosMegamdInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosMegamdInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosMegamdInstall{},inputs)
 }
 

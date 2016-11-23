@@ -32,7 +32,7 @@ func (tpl *UbuntuAddRepos) Options(t *templates.Template) {
   }
 }
 
-func (tpl *UbuntuAddRepos) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuAddRepos) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuAddRepos{
       repos: tpl.repos,
     },inputs)

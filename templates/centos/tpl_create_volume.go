@@ -48,7 +48,7 @@ func (tpl *CentosCreateVolume) Render(p urknall.Package) {
 		})
 }
 
-func (tpl *CentosCreateVolume) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosCreateVolume) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosCreateVolume{
 		disk:     tpl.disk,
 	},inputs)

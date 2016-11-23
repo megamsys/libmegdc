@@ -38,7 +38,7 @@ func (tpl *DebianGatewayRemove) Render(p urknall.Package) {
 func (tpl *DebianGatewayRemove) Options(t *templates.Template) {
 }
 
-func (tpl *DebianGatewayRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianGatewayRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianGatewayRemove{},inputs)
 }
 

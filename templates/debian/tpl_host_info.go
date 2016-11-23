@@ -37,7 +37,7 @@ func (tpl *DebianHostInfo) Render(p urknall.Package) {
 
 func (tpl *DebianHostInfo) Options(t *templates.Template) {}
 
-func (tpl *DebianHostInfo) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianHostInfo) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianHostInfo{},inputs)
 }
 

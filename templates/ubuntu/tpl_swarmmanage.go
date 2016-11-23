@@ -79,7 +79,7 @@ func (tpl *UbuntuSwarmManageInstall) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuSwarmManageInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuSwarmManageInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target,tpl,inputs)
 }
 

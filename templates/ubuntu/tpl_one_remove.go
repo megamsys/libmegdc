@@ -37,7 +37,7 @@ func (tpl *UbuntuOneRemove) Render(p urknall.Package) {
 func (tpl *UbuntuOneRemove) Options(t *templates.Template) {
 }
 
-func (tpl *UbuntuOneRemove) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuOneRemove) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuOneRemove{},inputs)
 }
 

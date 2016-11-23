@@ -43,7 +43,7 @@ func (tpl *CentosVerticeReport) Render(p urknall.Package) {
 func (tpl *CentosVerticeReport) Options(t *templates.Template) {
 }
 
-func (tpl *CentosVerticeReport) Run(target urknall.Target,inputs []string) error {
+func (tpl *CentosVerticeReport) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &CentosVerticeReport{},inputs)
 }
 

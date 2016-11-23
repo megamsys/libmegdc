@@ -69,7 +69,7 @@ func (tpl *UbuntuEnableCephAccess) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuEnableCephAccess) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuEnableCephAccess) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, tpl, inputs)
 }
 

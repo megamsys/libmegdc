@@ -32,7 +32,7 @@ func (tpl *UbuntuCustomPackagesInstall) Options(t *templates.Template) {
   }
 }
 
-func (tpl *UbuntuCustomPackagesInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuCustomPackagesInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuCustomPackagesInstall{
       packages: tpl.packages,
     },inputs)

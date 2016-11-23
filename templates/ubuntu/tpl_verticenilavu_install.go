@@ -44,7 +44,7 @@ func (tpl *UbuntuNilavuInstall) Options(t *templates.Template) {
 	}
 }
 
-func (tpl *UbuntuNilavuInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *UbuntuNilavuInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, tpl,inputs)
 }
 

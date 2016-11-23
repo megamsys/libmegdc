@@ -38,7 +38,7 @@ func (tpl *DebianSnowflakeInstall) Render(p urknall.Package) {
 func (tpl *DebianSnowflakeInstall) Options(t *templates.Template) {
 }
 
-func (tpl *DebianSnowflakeInstall) Run(target urknall.Target,inputs []string) error {
+func (tpl *DebianSnowflakeInstall) Run(target urknall.Target,inputs map[string]string) error {
 	return urknall.Run(target, &DebianSnowflakeInstall{},inputs)
 }
 

@@ -49,7 +49,7 @@ func (tpl *UbuntuVmInitScript) Render(p urknall.Package) {
 	})
 }
 
-func (tpl *UbuntuVmInitScript) Run(target urknall.Target, inputs []string) error {
+func (tpl *UbuntuVmInitScript) Run(target urknall.Target, inputs map[string]string) error {
 	return urknall.Run(target, &UbuntuVmInitScript{
 		initscripts: tpl.initscripts,
 	}, inputs)
